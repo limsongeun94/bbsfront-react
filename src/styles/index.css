@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   position: relative;
 
   margin: 0;
@@ -24,14 +25,30 @@ main.main-layout {
   min-width: 1280px;
 
   display: grid;
-  grid-template-rows: 80px minmax(720px, auto) 80px;
+  grid-template-rows: 56px minmax(720px, auto) 80px;
   grid-template-columns: 200px minmax(1080px, auto);
-
 }
 
 .main-layout > header {
   grid-row: 1;
   grid-column: 1 / 3;
+  color: white;
+}
+
+.mb-3 {
+  height: 38px;
+  width: 500px;
+  margin: 0 !important;
+}
+
+.outline-secondary,
+#input-group-dropdown-1 {
+  background: lightgray;
+}
+
+.left-nav {
+  background-color: lightgray;
+  height: 100vh;
 }
 
 .main-layout > section {
@@ -49,7 +66,6 @@ main.main-layout {
   grid-column: 1 / 3;
 }
 
-
 /* #main {
   max-width: 1440px;
   min-width: 1280px;
@@ -57,7 +73,7 @@ main.main-layout {
 } */
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
