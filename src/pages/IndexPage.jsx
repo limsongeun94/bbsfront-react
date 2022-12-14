@@ -1,11 +1,7 @@
-import Page from 'src/components/Page'
+import Page from "src/components/Page";
 
 const IndexPage = (props) => {
-  return (
-    <Page>
-      index page
-    </Page>
-  )
-}
+  return <Page>index page</Page>;
+};
 
-export default IndexPage
+export default IndexPage;

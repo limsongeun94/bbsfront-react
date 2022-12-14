@@ -51,6 +51,14 @@ main.main-layout {
   height: 100vh;
 }
 
+.nav-link {
+  color: #6c757d;
+}
+
+#disnav {
+  color: #212529 !important;
+}
+
 .main-layout > section {
   grid-row: 2;
   grid-column-start: 1;
@@ -84,4 +92,31 @@ a {
 
 a:visited {
   color: unset;
+}
+
+.loginpage {
+  background-color: lightgray;
+  width: 400px;
+  text-align: center;
+  padding: 30px;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.margin-bottom {
+  margin-bottom: 20px;
+}
+
+.login-input {
+  width: 250px;
+}
+
+.login-btn {
+  width: 250px;
+}
+.login-link {
+  font-size: 0.9em;
 }

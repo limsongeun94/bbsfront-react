@@ -1,12 +1,12 @@
-import Header from './Header'
-import Footer from './Footer'
-import Navigator from './Navigator'
-import { Outlet } from 'react-router-dom'
+import Header from "./Header";
+import Footer from "./Footer";
+import Navigator from "./Navigator";
+import { Outlet } from "react-router-dom";
 
 const Layout = (props) => {
   return (
     <>
-      <main className='main-layout'>
+      <main className="main-layout">
         <Header />
         <Footer />
         <Navigator />
@@ -15,7 +15,7 @@ const Layout = (props) => {
         </section>
       </main>
     </>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

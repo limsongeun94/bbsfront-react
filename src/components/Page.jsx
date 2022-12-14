@@ -1,10 +1,5 @@
-
 const Page = (props) => {
-  return (
-    <div className="page">
-      { props.children }
-    </div>
-  )
-}
+  return <div className="page">{props.children}</div>;
+};
 
-export default Page
+export default Page;

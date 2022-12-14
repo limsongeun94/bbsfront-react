@@ -4,7 +4,7 @@ const Navigator = (props) => {
   return (
     <nav>
       <Nav defaultActiveKey="/home" className="flex-column left-nav">
-        <Nav.Link eventKey="disabled" disabled>
+        <Nav.Link eventKey="disabled" disabled id="disnav">
           즐겨찾기
         </Nav.Link>
         <Nav.Link eventKey="link-0">즐찾 게시판이름</Nav.Link>

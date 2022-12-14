@@ -1,9 +1,5 @@
 const Footer = (props) => {
-  return (
-    <footer>
-      푸터
-    </footer>
-  )
-}
+  return <footer>푸터</footer>;
+};
 
-export default Footer
+export default Footer;
