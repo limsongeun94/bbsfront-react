@@ -110,7 +110,9 @@ a:visited {
 .loginpage,
 .joinpage0,
 .joinpage1,
-.joinpage2 {
+.joinpage2,
+.joinpage3,
+.emailAuth {
   border-radius: 0.375rem;
   border: 2px solid #212529;
   color: #212529 !important;
@@ -131,6 +133,10 @@ a:visited {
 
 .margin-bottom {
   margin-bottom: 20px;
+}
+
+.login-link {
+  cursor: pointer;
 }
 
 .join-textarea {

@@ -53,10 +53,22 @@ const LoginPage = (props) => {
           </button>
         </div>
         <div className="login-link">
-          <a>비밀번호 찾기</a>
+          <a
+            onClick={() => {
+              navigate("/landing/findpword");
+            }}
+          >
+            비밀번호 찾기
+          </a>
         </div>
         <div className="margin-bottom login-link">
-          <a>회원가입</a>
+          <a
+            onClick={() => {
+              navigate("/landing/join0");
+            }}
+          >
+            회원가입
+          </a>
         </div>
       </div>
     </Page>
