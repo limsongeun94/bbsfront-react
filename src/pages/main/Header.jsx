@@ -29,14 +29,6 @@ const Header = (props) => {
 
   return (
     <header>
-      {/* {user.id ? (
-        <div>
-          <span>{user.nick}님 안녕하세요</span>
-          <button onClick={doLogout}>로그아웃</button>
-        </div>
-      ) : (
-        <button onClick={toLogin}>로그인</button>
-      )} */}
       <Navbar bg="dark" variant="dark">
         <Container>
           <Navbar.Brand href="#home">
@@ -54,7 +46,7 @@ const Header = (props) => {
               variant="outline-secondary"
               title="검색내용"
               id="input-group-dropdown-1"
-              className="outline-secondary"
+              className="outline-secondary header-dropdown"
             >
               <Dropdown.Item href="#">전체</Dropdown.Item>
               <Dropdown.Item href="#">제목</Dropdown.Item>
@@ -77,7 +69,7 @@ const Header = (props) => {
                 <span>{user.nick}님 안녕하세요</span>
                 <Button
                   variant="outline-secondary"
-                  className="outline-secondary"
+                  className="outline-secondary text-nowrap"
                   onClick={doLogout}
                 >
                   로그아웃
@@ -85,9 +77,11 @@ const Header = (props) => {
               </div>
             ) : (
               // <Button variant="outline-primary">Primary</Button>
+              // 버튼이 퍼지는 이유는 글자가 개행(너비가 부족해서 다음줄로 넘어감)되어서 그런건데
+              // css 옵션중에 글자 개행을 막는 옵션이 white-space: nowrap; 이야
               <Button
                 variant="outline-secondary"
-                className="outline-secondary"
+                className="outline-secondary text-nowrap"
                 onClick={toLogin}
               >
                 로그인
