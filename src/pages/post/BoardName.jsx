@@ -1,7 +1,7 @@
-const BoardName = () => {
+const BoardName = (props) => {
   return (
     <div>
-      <h3>게시판이름</h3>
+      <h3 className="board-name">{props.name}</h3>
     </div>
   );
 };

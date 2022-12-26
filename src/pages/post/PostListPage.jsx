@@ -1,11 +1,19 @@
 import Pagination from "react-bootstrap/Pagination";
 import Header from "src/pages/main/Header";
+import Footer from "src/pages/main/Footer";
 import Page from "src/components/Page";
 import { Button } from "react-bootstrap";
 import ListTable from "src/pages/post/ListTable";
 import BoardName from "src/pages/post/BoardName";
+import { useEffect, useState } from "react";
 
 const PostListPage = () => {
+  const [post, setPost] = useState({
+    board: {
+      name: "",
+    },
+  });
+
   return (
     <Page>
       <Header />
@@ -20,6 +28,7 @@ const PostListPage = () => {
           글쓰기
         </Button>
       </div>
+      <Footer />
     </Page>
   );
 };

@@ -1,48 +1,60 @@
 import Header from "../main/Header";
 import Page from "src/components/Page";
 import BoardName from "./BoardName";
+import PostDetailInfo from "./PostDetailInfo";
+import PostDetailMain from "./PostDetailMain";
+import PostDetailReply from "./PostDetailReply";
+import ListTable from "./ListTable";
+import Footer from "../main/Footer";
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { request } from "src/libs/request";
 
 const PostDetailPage = () => {
+  const { id } = useParams();
+  const [post, setPost] = useState({
+    board: {
+      name: "",
+    },
+    title: "",
+    writer: {
+      nick: "",
+      id: "",
+      introduction: "",
+    },
+    replies_cnt: 0,
+    view_cnt: 0,
+    created_at: "",
+    updated_at: "",
+    body: "",
+    thumbs_up_cnt: 0,
+    thumbs_down_cnt: 0,
+    replies: [],
+  });
+  console.log(id);
+
+  useEffect(() => {
+    request
+      .get("/post", {
+        params: {
+          id: id,
+        },
+      })
+      .then((response) => {
+        console.log(response.data.thumbs_up_cnt);
+        setPost(response.data);
+      });
+  }, []);
+
   return (
     <Page>
       <Header />
-      <BoardName />
-      <div>
-        <div className="post-detail-title">게시글 제목</div>
-        <div className="post-detail-head">
-          <div>
-            <img
-              src="/images.jpg"
-              width="150"
-              height="150"
-              className="d-inline-block align-top"
-              alt="React Bootstrap logo"
-            />
-          </div>
-          <div>
-            <div>작성자닉네임 (작성자아이디)</div>
-            <div>작성자 자기소개글</div>
-          </div>
-          <div>
-            <div>
-              <span>댓글&nbsp;</span>
-              <span>111</span>
-            </div>
-            <div>
-              <span>조회수&nbsp;</span>
-              <span>111</span>
-            </div>
-            <div>
-              <span>작성&nbsp;</span>
-              <span>12.22</span>
-            </div>
-            <div>
-              <span>수정&nbsp;</span>
-              <span>15:37</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <BoardName name={post.board.name} />
+      <PostDetailInfo post={post} />
+      <PostDetailMain post={post} />
+      <PostDetailReply />
+      <ListTable />
+      <Footer />
     </Page>
   );
 };

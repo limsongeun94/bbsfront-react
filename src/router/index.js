@@ -78,7 +78,12 @@ const router = createBrowserRouter([
       },
       {
         path: "detail",
-        element: <PostDetailPage />,
+        children: [
+          {
+            path: ":id",
+            element: <PostDetailPage />,
+          },
+        ],
       },
     ],
   },
