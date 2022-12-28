@@ -11,17 +11,21 @@ import { useEffect, useState } from "react";
 import { request } from "src/libs/request";
 
 const PostDetailPage = () => {
+  // 이 값이 결국엔 post_id 맞지? 응
   const { id } = useParams();
+
   const [post, setPost] = useState({
+    id: 0,
     board: {
       name: "",
     },
-    title: "",
     writer: {
-      nick: "",
       id: "",
+      nick: "",
       introduction: "",
+      thumbnail: "",
     },
+    title: "",
     replies_cnt: 0,
     view_cnt: 0,
     created_at: "",
@@ -29,19 +33,23 @@ const PostDetailPage = () => {
     body: "",
     thumbs_up_cnt: 0,
     thumbs_down_cnt: 0,
-    replies: [],
   });
 
-  useEffect(() => {
+  const showDetailPage = () => {
     request
-      .get("/post", {
+      .get("post", {
         params: {
           id: id,
         },
       })
       .then((response) => {
+        console.log(response.data);
         setPost(response.data);
       });
+  };
+
+  useEffect(() => {
+    showDetailPage();
   }, [id]);
 
   return (
@@ -50,7 +58,7 @@ const PostDetailPage = () => {
       <BoardName name={post.board.name} />
       <PostDetailInfo post={post} />
       <PostDetailMain post={post} />
-      <PostDetailReply id={id} />
+      <PostDetailReply post_id={id} />
       <ListTable />
       <Footer />
     </Page>

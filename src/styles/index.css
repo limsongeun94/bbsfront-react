@@ -318,13 +318,15 @@ a:visited {
 }
 
 .ripple-body {
-  text-align: left !important;
+  /* text-align: left !important; */
+  flex-grow: 1;
 }
 
 .ripple-foot {
   border: 1px solid black;
   width: 181px;
   padding: 10px;
+  text-align: center;
 }
 
 .margin-right {
