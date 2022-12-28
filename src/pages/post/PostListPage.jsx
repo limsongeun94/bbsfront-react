@@ -8,12 +8,6 @@ import BoardName from "src/pages/post/BoardName";
 import { useEffect, useState } from "react";
 
 const PostListPage = () => {
-  const [post, setPost] = useState({
-    board: {
-      name: "",
-    },
-  });
-
   return (
     <Page>
       <Header />
