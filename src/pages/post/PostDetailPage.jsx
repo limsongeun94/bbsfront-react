@@ -31,7 +31,6 @@ const PostDetailPage = () => {
     thumbs_down_cnt: 0,
     replies: [],
   });
-  console.log(id);
 
   useEffect(() => {
     request
@@ -41,10 +40,9 @@ const PostDetailPage = () => {
         },
       })
       .then((response) => {
-        console.log(response.data.thumbs_up_cnt);
         setPost(response.data);
       });
-  }, []);
+  }, [id]);
 
   return (
     <Page>
@@ -52,7 +50,7 @@ const PostDetailPage = () => {
       <BoardName name={post.board.name} />
       <PostDetailInfo post={post} />
       <PostDetailMain post={post} />
-      <PostDetailReply />
+      <PostDetailReply id={id} />
       <ListTable />
       <Footer />
     </Page>

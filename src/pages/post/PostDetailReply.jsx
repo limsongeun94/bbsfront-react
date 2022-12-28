@@ -1,6 +1,18 @@
 import { Button } from "react-bootstrap";
+import { useEffect } from "react";
+import { request } from "src/libs/request";
 
 const PostDetailReply = (props) => {
+  useEffect(() => {
+    request
+      .get("pose/reply", {
+        params: {
+          post_id: props.id,
+        },
+      })
+      .then((response) => console.log("리플", response.data));
+  }, []);
+
   return (
     <>
       <div className="ripple-view-wrapper">

@@ -317,6 +317,10 @@ a:visited {
   padding: 10px;
 }
 
+.ripple-body {
+  text-align: left !important;
+}
+
 .ripple-foot {
   border: 1px solid black;
   width: 181px;

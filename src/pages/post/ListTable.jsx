@@ -8,8 +8,8 @@ const ListTable = () => {
   const [postList, setPostList] = useState([]);
 
   const handleShowList = () => {
-    axios
-      .get("https://bbsapi-dev.seoly.me/api/v1/post/list/page", {
+    request
+      .get("post/list/page", {
         params: {
           // page값 바뀔때마다 데이터 바뀌는거 보이지? 응
           // 밑에 1,2,3,4... 버튼 누를때마다 page값 넣어서 api요청 넣으면 돼.
@@ -17,8 +17,7 @@ const ListTable = () => {
         },
       })
       .then((response) => {
-        const content = response.data.data.contents;
-        console.log(content);
+        const content = response.data.contents;
         setPostList([...content]);
       });
   };
@@ -26,19 +25,6 @@ const ListTable = () => {
   useEffect(() => {
     handleShowList();
   }, []);
-
-  // const d = data.updated_at;
-  // const date =
-  //   d.getFullYear() +
-  //   "." +
-  //   (d.getMonth() + 1 > 9
-  //     ? (d.getMonth() + 1).toString()
-  //     : "0" + (d.getMonth() + 1)) +
-  //   "." +
-  //   (d.getDate() > 9
-  //     ? d.getDate().toString()
-  //     : "0" + d.getDate().toString()) +
-  //   ".";
 
   const onClickDetail = (data_id) => {
     request
@@ -48,7 +34,6 @@ const ListTable = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
         navigate("/post/detail/" + data_id);
       });
   };
