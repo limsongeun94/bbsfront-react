@@ -1,20 +1,10 @@
 import { Nav } from "react-bootstrap";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { request } from "src/libs/request";
 import { useEffect, useState } from "react";
 
 const Navigator = (props) => {
   const navigate = useNavigate();
-
-  const eng_board_name = [
-    "hotdeal",
-    "humor",
-    "counsel",
-    "travel",
-    "dessert",
-    "electronics",
-  ];
-
   const [boardList, setBoardList] = useState([]);
 
   const showBoardList = () => {
@@ -43,8 +33,7 @@ const Navigator = (props) => {
             key={data.id}
             eventKey={"link-" + data.id}
             onClick={() => {
-              data.eng_name = eng_board_name[index];
-              navigate("post/list/" + data.eng_name);
+              navigate("post/list/" + data.id);
             }}
           >
             {data.name}
