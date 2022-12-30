@@ -319,12 +319,8 @@ a:visited {
 }
 
 .ripple-body {
-<<<<<<< HEAD
   flex-grow: 1;
   padding: 10px;
-=======
-  text-align: left !important;
->>>>>>> parent of ba6b0fa (댓글 생성, 보여주기)
 }
 
 .ripple-foot {

@@ -5,14 +5,52 @@ import Page from "src/components/Page";
 import { Button } from "react-bootstrap";
 import ListTable from "src/pages/post/ListTable";
 import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { request } from "src/libs/request";
+
 const PostListPage = () => {
   const { params } = useParams();
+
+  const [boardId, setBoardId] = useState(0);
+
+  const eng_board_name = [
+    "hotdeal",
+    "humor",
+    "counsel",
+    "travel",
+    "dessert",
+    "electronics",
+  ];
+
+  const [postList, setPostList] = useState([]);
+
+  const handleShowList = () => {
+    request
+      .get("post/list/page", {
+        // params: {
+        //   // page값 바뀔때마다 데이터 바뀌는거 보이지? 응
+        //   // 밑에 1,2,3,4... 버튼 누를때마다 page값 넣어서 api요청 넣으면 돼.
+        //   page: 1,
+        // },
+        params: {
+          board_id: boardId,
+        },
+      })
+      .then((response) => {
+        const content = response.data.contents;
+        setPostList([...content]);
+      });
+  };
+
+  useEffect(() => {
+    handleShowList();
+  }, []);
 
   return (
     <Page>
       <Header />
       <h3 className="board-name">{params}</h3>
-      <ListTable params={params} />
+      <ListTable params={params} postList={postList} />
       <div className="list-bottom">
         <PageNum className="wright-page" />
         <Button
