@@ -1,6 +1,5 @@
 import Header from "../main/Header";
 import Page from "src/components/Page";
-import BoardName from "./BoardName";
 import PostDetailInfo from "./PostDetailInfo";
 import PostDetailMain from "./PostDetailMain";
 import PostDetailReply from "./PostDetailReply";
@@ -11,7 +10,6 @@ import { useEffect, useState } from "react";
 import { request } from "src/libs/request";
 
 const PostDetailPage = () => {
-  // 이 값이 결국엔 post_id 맞지? 응
   const { id } = useParams();
 
   const [post, setPost] = useState({
@@ -55,7 +53,7 @@ const PostDetailPage = () => {
   return (
     <Page>
       <Header />
-      <BoardName name={post.board.name} />
+      <h3 className="board-name">{post.board.name}</h3>
       <PostDetailInfo post={post} />
       <PostDetailMain post={post} />
       <PostDetailReply post_id={id} />

@@ -54,7 +54,8 @@ main.main-layout {
 }
 
 .left-nav {
-  margin: 20px 0;
+  margin: 10px 0;
+  padding: 16px 0;
   border-top: 2px solid #212529;
   border-bottom: 2px solid #212529;
 }
@@ -318,8 +319,8 @@ a:visited {
 }
 
 .ripple-body {
-  /* text-align: left !important; */
   flex-grow: 1;
+  padding: 10px;
 }
 
 .ripple-foot {

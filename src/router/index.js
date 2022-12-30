@@ -74,7 +74,12 @@ const router = createBrowserRouter([
     children: [
       {
         path: "list",
-        element: <PostListPage />,
+        children: [
+          {
+            path: ":params",
+            element: <PostListPage />,
+          },
+        ],
       },
       {
         path: "detail",
