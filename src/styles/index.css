@@ -327,6 +327,7 @@ a:visited {
   border: 1px solid black;
   width: 181px;
   padding: 10px;
+  text-align: center;
 }
 
 .margin-right {
