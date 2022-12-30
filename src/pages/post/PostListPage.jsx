@@ -15,7 +15,7 @@ const PostListPage = () => {
     <Page>
       <Header />
       <h3 className="board-name">게시판이름</h3>
-      <ListTable />
+      <ListTable params={params} />
       <div className="list-bottom">
         <PageNum className="wright-page" />
         <Button

@@ -20,6 +20,7 @@ const PostDetailPage = () => {
       nick: "",
       id: "",
       introduction: "",
+      thumbnail: "",
     },
     replies_cnt: 0,
     view_cnt: 0,

@@ -16,7 +16,7 @@ const ListTable = (props) => {
         //   page: 1,
         // },
         params: {
-          board_id: 1,
+          board_id: props.params,
         },
       })
       .then((response) => {

@@ -10,7 +10,6 @@ const Navigator = (props) => {
   const showBoardList = () => {
     request.get("board/list").then((response) => {
       setBoardList(response.data);
-      console.log(response.data);
     });
   };
 
