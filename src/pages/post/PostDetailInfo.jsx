@@ -5,7 +5,7 @@ const PostDetailInfo = (props) => {
       <div className="post-detail-head">
         <div>
           <img
-            src={props.post.writer.thumbnail}
+            src="/images.jpg"
             width="150"
             height="150"
             className="d-inline-block align-top"
