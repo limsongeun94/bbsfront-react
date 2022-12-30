@@ -20,7 +20,7 @@ const Navigator = (props) => {
   return (
     <nav>
       <Nav defaultActiveKey="/home" className="flex-column left-nav">
-        <Nav.Link eventKey="link-0">전체 게시판</Nav.Link>
+        <Nav.Link>전체게시판</Nav.Link>
         <hr />
         <Nav.Link eventKey="disabled" disabled id="disnav">
           즐겨찾기

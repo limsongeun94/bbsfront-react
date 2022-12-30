@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { request } from "src/libs/request";
 
 const ListTable = (props) => {
@@ -10,11 +10,6 @@ const ListTable = (props) => {
   const handleShowList = () => {
     request
       .get("post/list/page", {
-        // params: {
-        //   // page값 바뀔때마다 데이터 바뀌는거 보이지? 응
-        //   // 밑에 1,2,3,4... 버튼 누를때마다 page값 넣어서 api요청 넣으면 돼.
-        //   page: 1,
-        // },
         params: {
           board_id: props.params,
         },

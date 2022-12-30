@@ -4,13 +4,12 @@ import Footer from "src/pages/main/Footer";
 import Page from "src/components/Page";
 import { Button } from "react-bootstrap";
 import ListTable from "src/pages/post/ListTable";
+import BoardName from "src/pages/post/BoardName";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import React, { useState, useEffect } from "react";
-import { request } from "src/libs/request";
 
 const PostListPage = () => {
   const { params } = useParams();
-
   return (
     <Page>
       <Header />
