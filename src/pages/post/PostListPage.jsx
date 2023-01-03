@@ -4,16 +4,35 @@ import Footer from "src/pages/main/Footer";
 import Page from "src/components/Page";
 import { Button } from "react-bootstrap";
 import ListTable from "src/pages/post/ListTable";
-import BoardName from "src/pages/post/BoardName";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { request } from "src/libs/request";
 
 const PostListPage = () => {
   const { params } = useParams();
+
+  const [boardName, setBoardName] = useState("");
+
+  const showBoardName = () => {
+    request
+      .get("board", {
+        params: {
+          id: params,
+        },
+      })
+      .then((response) => {
+        setBoardName(response.data.name);
+      });
+  };
+
+  useEffect(() => {
+    showBoardName();
+  }, []);
+
   return (
     <Page>
       <Header />
-      <h3 className="board-name">게시판이름</h3>
+      <h3 className="board-name">{boardName}</h3>
       <ListTable params={params} />
       <div className="list-bottom">
         <PageNum className="wright-page" />

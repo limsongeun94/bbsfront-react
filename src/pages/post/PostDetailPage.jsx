@@ -43,7 +43,6 @@ const PostDetailPage = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setPost(response.data);
       });
   };

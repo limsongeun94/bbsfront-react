@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { request } from "src/libs/request";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -21,7 +21,6 @@ const JoinPage0 = () => {
   const user = useSelector((state) => {
     return state.regi_user;
   });
-  console.log(user);
 
   const [serviceTermsId, setServiceTermsId] = useState(0);
   const [serviceAgree, setServiceAgree] = useState("");
@@ -48,18 +47,14 @@ const JoinPage0 = () => {
   };
 
   useEffect(() => {
-    axios
-      .get("https://bbsapi-dev.seoly.me/api/v1/terms/service")
-      .then((response) => {
-        setServiceAgree(response.data.data.Terms.content);
-        setServiceTermsId(response.data.data.Terms.id);
-      });
-    axios
-      .get("https://bbsapi-dev.seoly.me/api/v1/terms/privacy")
-      .then((response) => {
-        setInfoAgree(response.data.data.Terms.content);
-        setInfoTermsId(response.data.data.Terms.id);
-      });
+    request.get("/terms/service").then((response) => {
+      setServiceAgree(response.data.Terms.content);
+      setServiceTermsId(response.data.Terms.id);
+    });
+    request.get("/terms/privacy").then((response) => {
+      setInfoAgree(response.data.Terms.content);
+      setInfoTermsId(response.data.Terms.id);
+    });
   }, []);
 
   const navigate = useNavigate();
@@ -143,7 +138,6 @@ const JoinPage1 = () => {
   const user = useSelector((state) => {
     return state.regi_user;
   });
-  console.log(user);
 
   const [pwordCheck, setPwordCheck] = useState("");
   const [nickDup, setNickDup] = useState(null);
@@ -165,15 +159,14 @@ const JoinPage1 = () => {
 
   const dbCheck = () => {
     setNickCount(nickCount + 1);
-    axios
-      .get("https://bbsapi-dev.seoly.me/api/v1/user/available", {
+    request
+      .get("/user/available", {
         params: {
           nick: user.nick,
         },
       })
       .then((response) => {
-        console.log(response.data.data);
-        if (response.data.data) {
+        if (response.data) {
           setNickDup(true);
         } else {
           setNickDup(false);
@@ -295,7 +288,6 @@ const JoinPage2 = () => {
   const user = useSelector((state) => {
     return state.regi_user;
   });
-  console.log(user);
 
   const onChangeName = (e) => {
     const regex = /^[ㄱ-ㅎ|가-힣]+$/;
@@ -345,7 +337,7 @@ const JoinPage2 = () => {
   };
 
   const handleJoin = () => {
-    axios.post("https://bbsapi-dev.seoly.me/api/v1/user/register", {
+    request.post("/user/register", {
       create: {
         email: user.email,
         password: user.password,
@@ -404,9 +396,12 @@ const JoinPage2 = () => {
         </button>
       </div>
       <div className="margin-bottom">
-        <div id="user-join-adress" placeholder="주소" className="join-div">
-          {user.address}
-        </div>
+        <input
+          id="user-join-adress"
+          placeholder="주소"
+          className="join-div"
+          value={user.address}
+        />
       </div>
       <div className="margin-bottom">
         <textarea
@@ -440,10 +435,8 @@ const JoinPage3 = () => {
   const user = useSelector((state) => {
     return state.regi_user;
   });
-  console.log(user);
 
   useEffect(() => {
-    console.log("안녕");
     return () => {
       dispatch(removeInfo());
     };

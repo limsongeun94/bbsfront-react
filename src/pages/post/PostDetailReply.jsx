@@ -26,7 +26,6 @@ const PostDetailReply = (props) => {
         },
       })
       .then((response) => {
-        console.log("조회", response.data);
         setReply(response.data);
       });
   };
@@ -41,7 +40,6 @@ const PostDetailReply = (props) => {
         body: createReply,
       })
       .then((response) => {
-        console.log("등록", response.data);
         setReply([...reply, response.data]);
         onReset();
       });

@@ -30,7 +30,7 @@ const Header = (props) => {
   return (
     <header>
       <Navbar bg="dark" variant="dark">
-        <Container>
+        <Container className="container">
           <Navbar.Brand
             onClick={() => navigate("/")}
             style={{ cursor: "pointer" }}
@@ -68,7 +68,7 @@ const Header = (props) => {
           </InputGroup>
           <div>
             {user.id ? (
-              <div>
+              <div className="text-nowrap">
                 <span>{user.nick}님 안녕하세요</span>
                 <Button
                   variant="outline-secondary"
