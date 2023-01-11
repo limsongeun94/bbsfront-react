@@ -1,7 +1,9 @@
+import dateFomat from "../../libs/datetime";
+
 const PostDetailInfo = (props) => {
   return (
     <div>
-      <div className="post-detail-title">{props.post.title}</div>
+      <h2 className="post-detail-title">{props.post.title}</h2>
       <div className="post-detail-head">
         <div>
           <img
@@ -30,11 +32,11 @@ const PostDetailInfo = (props) => {
           </div>
           <div>
             <span>작성&nbsp;</span>
-            <span>{props.post.created_at}</span>
+            <span>{dateFomat(props.post.created_at)}</span>
           </div>
           <div>
             <span>수정&nbsp;</span>
-            <span>{props.post.updated_at}</span>
+            <span>{dateFomat(props.post.updated_at)}</span>
           </div>
         </div>
       </div>

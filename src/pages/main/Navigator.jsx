@@ -20,19 +20,32 @@ const Navigator = (props) => {
   return (
     <nav>
       <Nav defaultActiveKey="/home" className="flex-column left-nav">
-        <Nav.Link>전체게시판</Nav.Link>
+        <Nav.Link
+          onClick={() => {
+            navigate("/post/list/0");
+          }}
+        >
+          전체게시판
+        </Nav.Link>
+        <Nav.Link
+          onClick={() => {
+            navigate("/notice/list");
+          }}
+        >
+          공지사항
+        </Nav.Link>
         <hr />
         <Nav.Link eventKey="disabled" disabled id="disnav">
           즐겨찾기
         </Nav.Link>
         <Nav.Link>즐찾 게시판이름</Nav.Link>
         <hr />
-        {boardList.map((data, index) => (
+        {boardList.map((data) => (
           <Nav.Link
             key={data.id}
             eventKey={"link-" + data.id}
             onClick={() => {
-              navigate("post/list/" + data.id);
+              navigate("/post/list/" + data.id);
             }}
           >
             {data.name}

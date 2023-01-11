@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import Page from "src/components/Page";
 import { request } from "src/libs/request";
+import { useNavigate } from "react-router-dom";
+import Page from "src/components/Page";
 
 const IndexPage = (props) => {
   const [bestPostList, setBestPostList] = useState([]);
   const [newPostList, setNewPostList] = useState([]);
   const [bestBoardList, setBestBoardList] = useState([]);
   const [newBoardList, setNewBoardList] = useState([]);
+  const [noticeList, setNoticeList] = useState([]);
   const [boardTab, setBoardTab] = useState("best");
 
   const showBoard = () => {
@@ -31,15 +33,23 @@ const IndexPage = (props) => {
         setNewPostList(response.data);
       });
 
-    request.get("/board/best/list").then((response) => {
+    request.get("board/best/list").then((response) => {
       setBestBoardList(response.data);
-      console.log("인기", response.data);
     });
 
-    request.get("/board/new/list").then((response) => {
+    request.get("board/new/list").then((response) => {
       setNewBoardList(response.data);
-      console.log("신규", newBoardList);
     });
+
+    request
+      .get("notice/list", {
+        params: {
+          board_id: 0,
+        },
+      })
+      .then((response) => {
+        setNoticeList(response.data);
+      });
   };
 
   useEffect(() => {
@@ -48,80 +58,97 @@ const IndexPage = (props) => {
 
   return (
     <Page>
-      <div>
-        <div>최신게시글</div>
-        <table className="thumbnail_table">
-          {newPostList.map((data) => (
-            <ThumbnailPost
-              key={data.id}
-              board_name={data.board_name}
-              title={data.title}
-              replies_cnt={data.replies_cnt}
-            />
-          ))}
-        </table>
-      </div>
-      <div>
-        <div>인기게시글</div>
-        <table className="thumbnail_table">
-          {bestPostList.map((data) => (
-            <ThumbnailPost
-              key={data.id}
-              board_name={data.board_name}
-              title={data.title}
-              replies_cnt={data.replies_cnt}
-            />
-          ))}
-        </table>
-      </div>
-      <div>
+      <div className="main_thumbnail">
         <div>
-          <span
-            onClick={() => {
-              setBoardTab("best");
-            }}
-            style={{ cursor: "pointer" }}
-          >
-            인기게시판
-          </span>
-          <span> | </span>
-          <span
-            onClick={() => {
-              setBoardTab("new");
-            }}
-            style={{ cursor: "pointer" }}
-          >
-            신설게시판
-          </span>
-          <span> | </span>
-          <span>게시판찾기</span>
-        </div>
-        {boardTab == "best" ? (
+          <div>최신게시글</div>
           <table className="thumbnail_table">
-            <tbody>
+            {newPostList.map((data) => (
+              <ThumbnailPost
+                key={data.id}
+                board_name={data.board_name}
+                title={data.title}
+                replies_cnt={data.replies_cnt}
+                id={data.id}
+              />
+            ))}
+          </table>
+        </div>
+        <div>
+          <div>인기게시글</div>
+          <table className="thumbnail_table">
+            {bestPostList.map((data) => (
+              <ThumbnailPost
+                key={data.id}
+                board_name={data.board_name}
+                title={data.title}
+                replies_cnt={data.replies_cnt}
+                id={data.id}
+              />
+            ))}
+          </table>
+        </div>
+        <div>
+          <div>
+            <span
+              onClick={() => {
+                setBoardTab("best");
+              }}
+              style={{ cursor: "pointer" }}
+            >
+              인기게시판
+            </span>
+            <span> | </span>
+            <span
+              onClick={() => {
+                setBoardTab("new");
+              }}
+              style={{ cursor: "pointer" }}
+            >
+              신설게시판
+            </span>
+            <span> | </span>
+            <span>게시판찾기</span>
+          </div>
+          {boardTab == "best" ? (
+            <table className="thumbnail_table">
               {bestBoardList.map((data) => (
-                <ThumbnailBoard key={data.id} name={data.name} />
+                <ThumbnailBoard key={data.id} name={data.name} id={data.id} />
               ))}
-            </tbody>
+            </table>
+          ) : (
+            <table className="thumbnail_table">
+              {newBoardList.map((data) => (
+                <ThumbnailBoard key={data.id} name={data.name} id={data.id} />
+              ))}
+            </table>
+          )}
+        </div>
+        <div>
+          <div>공지사항</div>
+          <table className="thumbnail_table">
+            {noticeList.map((data) => (
+              <THumbnailNotice
+                key={data.id}
+                title={data.title}
+                create_at={data.created_at}
+                id={data.id}
+              />
+            ))}
           </table>
-        ) : (
-          <table>
-            <tbody>
-              {newBoardList.map((data) => {
-                <ThumbnailBoard key={data.id} name={data.name} />;
-              })}
-            </tbody>
-          </table>
-        )}
+        </div>
       </div>
     </Page>
-    // </div>
   );
 };
 
 const ThumbnailPost = (props) => {
+  const navigate = useNavigate();
   return (
-    <tr>
+    <tr
+      onClick={() => {
+        navigate("post/detail/" + props.id);
+      }}
+    >
       <td>{props.board_name}</td>
       <td>{props.title}</td>
       <td>{props.replies_cnt}</td>
@@ -130,9 +157,28 @@ const ThumbnailPost = (props) => {
 };
 
 const ThumbnailBoard = (props) => {
+  const navigate = useNavigate();
   return (
-    <tr>
+    <tr
+      onClick={() => {
+        navigate("post/list/" + props.id);
+      }}
+    >
       <td>{props.name}</td>
+    </tr>
+  );
+};
+
+const THumbnailNotice = (props) => {
+  const navigate = useNavigate();
+  return (
+    <tr
+      onClick={() => {
+        navigate("notice/detail/" + props.id);
+      }}
+    >
+      <td>{props.title}</td>
+      <td>{props.create_at}</td>
     </tr>
   );
 };

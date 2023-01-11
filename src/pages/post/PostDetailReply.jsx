@@ -50,13 +50,13 @@ const PostDetailReply = (props) => {
       {reply.map((data) => {
         return <ReplyView key={data.id} data={data} />;
       })}
-      <div className="ripple-write-wrapper">
+      <div className="reply-write-wrapper">
         <textarea
           placeholder="내용을 작성하세요."
           onChange={onChange}
           value={createReply}
         />
-        <div className="ripple-submit-wrapper">
+        <div className="reply-submit-wrapper">
           <Button
             variant="outline-secondary"
             className="outline-secondary text-nowrap"
@@ -72,13 +72,13 @@ const PostDetailReply = (props) => {
 
 const ReplyView = (props) => {
   return (
-    <div className="ripple-view-wrapper">
-      <div className="ripple-head">
+    <div className="reply-view-wrapper">
+      <div className="reply-head">
         <div>{props.data.writer_nick}</div>
         <div>{props.data.created_at}</div>
       </div>
-      <div className="ripple-body">{props.data.body}</div>
-      <div class="ripple-foot">
+      <div className="reply-body">{props.data.body}</div>
+      <div class="reply-foot">
         <div>
           <Button
             variant="outline-secondary"

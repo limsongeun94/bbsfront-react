@@ -22,7 +22,7 @@ request.get("/user/info").then((res) => {
 app.render(
   <>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <RouterProvider router={router}></RouterProvider>
     </Provider>
   </>
 );

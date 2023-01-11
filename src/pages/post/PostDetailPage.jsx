@@ -1,17 +1,13 @@
-import Header from "../main/Header";
 import Page from "src/components/Page";
-import BoardName from "./BoardName";
 import PostDetailInfo from "./PostDetailInfo";
 import PostDetailMain from "./PostDetailMain";
 import PostDetailReply from "./PostDetailReply";
 import ListTable from "./ListTable";
-import Footer from "../main/Footer";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { request } from "src/libs/request";
 
 const PostDetailPage = () => {
-  // 이 값이 결국엔 post_id 맞지? 응
   const { id } = useParams();
 
   const [post, setPost] = useState({
@@ -53,13 +49,15 @@ const PostDetailPage = () => {
 
   return (
     <Page>
-      <Header />
-      <BoardName name={post.board.name} />
-      <PostDetailInfo post={post} />
-      <PostDetailMain post={post} />
-      <PostDetailReply post_id={id} />
+      <h2 className="board-name">{post.board.name}</h2>
+      <div className="post-detail-wrapper">
+        <PostDetailInfo post={post} />
+        <hr className="post-detail-line" />
+        <PostDetailMain post={post} />
+        <hr className="post-detail-line" />
+        <PostDetailReply post_id={id} />
+      </div>
       <ListTable />
-      <Footer />
     </Page>
   );
 };

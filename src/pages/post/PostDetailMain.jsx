@@ -1,9 +1,9 @@
 import { Button } from "react-bootstrap";
-
+import parse from "html-react-parser";
 const PostDetailMain = (props) => {
   return (
-    <div className="mina-text-wrapper">
-      <div className="main-text">{props.post.body}</div>
+    <div className="main-text-wrapper">
+      <div className="main-text">{parse(props.post.body)}</div>
       <div className="main-text-like-unlike">
         <Button
           variant="outline-secondary"

@@ -18,6 +18,9 @@ import MainLayout from "src/pages/main/Layout";
 import IndexPage from "src/pages/main/IndexPage";
 import PostListPage from "src/pages/post/PostListPage";
 import PostDetailPage from "src/pages/post/PostDetailPage";
+import UserInfoPage from "src/pages/user/UserInfoPage";
+import NoticeListPage from "src/pages/notice/NoticeListPage";
+import NoticeDetailPage from "src/pages/notice/NoticeDetailPage";
 
 const router = createBrowserRouter([
   {
@@ -32,7 +35,6 @@ const router = createBrowserRouter([
   },
   {
     path: "landing",
-    // element: <LandingLayout />,
     children: [
       {
         path: "login",
@@ -71,26 +73,35 @@ const router = createBrowserRouter([
   },
   {
     path: "post",
+    element: <MainLayout />,
+    children: [
+      {
+        path: "list/:params",
+        element: <PostListPage />,
+      },
+      {
+        path: "detail/:id",
+        element: <PostDetailPage />,
+      },
+    ],
+  },
+  {
+    path: "notice",
+    element: <MainLayout />,
     children: [
       {
         path: "list",
-        children: [
-          {
-            path: ":params",
-            element: <PostListPage />,
-          },
-        ],
+        element: <NoticeListPage />,
       },
       {
-        path: "detail",
-        children: [
-          {
-            path: ":id",
-            element: <PostDetailPage />,
-          },
-        ],
+        path: "detail/:id",
+        element: <NoticeDetailPage />,
       },
     ],
+  },
+  {
+    path: "userinfo",
+    element: <UserInfoPage />,
   },
 ]);
 

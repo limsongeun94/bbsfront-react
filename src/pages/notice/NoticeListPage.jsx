@@ -1,40 +1,14 @@
 import Page from "src/components/Page";
 import { Button } from "react-bootstrap";
-import ListTable from "src/pages/post/ListTable";
+import NoticeListTable from "./NoticeListTable";
 import { useEffect, useState } from "react";
 import Pagination from "react-bootstrap/Pagination";
-import { useParams } from "react-router-dom";
-import { request } from "src/libs/request";
 
-const PostListPage = () => {
-  const { params } = useParams();
-
-  const [boardName, setBoardName] = useState("");
-
-  const showBoardName = () => {
-    if (params == 0) {
-      setBoardName("전체게시판");
-    } else {
-      request
-        .get("board", {
-          params: {
-            id: params,
-          },
-        })
-        .then((response) => {
-          setBoardName(response.data.name);
-        });
-    }
-  };
-
-  useEffect(() => {
-    showBoardName();
-  }, [params]);
-
+const NoticeListPage = () => {
   return (
     <Page>
-      <h2 className="board-name">{boardName}</h2>
-      <ListTable params={params} />
+      <h2 className="board-name">공지</h2>
+      <NoticeListTable />
       <div className="list-bottom">
         <PageNum className="wright-page" />
         <Button
@@ -75,4 +49,4 @@ const PageNum = () => {
   );
 };
 
-export default PostListPage;
+export default NoticeListPage;
