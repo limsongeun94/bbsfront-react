@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { request } from "src/libs/request";
 
 const PostDetailPage = () => {
-  const { id } = useParams();
+  const { board_id, post_id } = useParams();
 
   const [post, setPost] = useState({
     id: 0,
@@ -35,7 +35,7 @@ const PostDetailPage = () => {
     request
       .get("post", {
         params: {
-          id: id,
+          id: post_id,
         },
       })
       .then((response) => {
@@ -43,9 +43,31 @@ const PostDetailPage = () => {
       });
   };
 
+  const [postList, setPostList] = useState([]);
+
+  const showPostList = () => {
+    request
+      .get("post/list/page", {
+        params: {
+          writer_id: 0,
+          // 1. post.board 이걸 사용할 수 있는데 문제는 비동기라서
+          // 명백하게 showDetailPage 이 완료된 후에 지금 이 함수를 실행하도록 하거나
+          // 2. url에 board_id 정보를 넣어서 그걸 받아 쓰면 돼.
+          // 페이지네이션까지 신경쓰려면 2번 방법이 편할듯..?
+          board_id: board_id, //얘는 어떻게해? 방법은 두가지야.
+          page: 1,
+          size: 10,
+        },
+      })
+      .then((response) => {
+        setPostList(response.data.contents);
+      });
+  };
+
   useEffect(() => {
     showDetailPage();
-  }, [id]);
+    showPostList();
+  }, [post_id]);
 
   return (
     <Page>
@@ -55,9 +77,9 @@ const PostDetailPage = () => {
         <hr className="post-detail-line" />
         <PostDetailMain post={post} />
         <hr className="post-detail-line" />
-        <PostDetailReply post_id={id} />
+        <PostDetailReply post_id={post_id} />
       </div>
-      <ListTable />
+      <ListTable postList={postList} />
     </Page>
   );
 };

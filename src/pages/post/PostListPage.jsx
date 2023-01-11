@@ -2,23 +2,25 @@ import Page from "src/components/Page";
 import { Button } from "react-bootstrap";
 import ListTable from "src/pages/post/ListTable";
 import { useEffect, useState } from "react";
-import Pagination from "react-bootstrap/Pagination";
 import { useParams } from "react-router-dom";
 import { request } from "src/libs/request";
+import PageNum from "./PageNum";
 
 const PostListPage = () => {
-  const { params } = useParams();
+  const { board_id } = useParams();
 
   const [boardName, setBoardName] = useState("");
+  const [postList, setPostList] = useState([]);
+  const [lastPage, setLastPage] = useState(0);
 
   const showBoardName = () => {
-    if (params == 0) {
+    if (board_id == 0) {
       setBoardName("전체게시판");
     } else {
       request
         .get("board", {
           params: {
-            id: params,
+            id: board_id,
           },
         })
         .then((response) => {
@@ -27,16 +29,33 @@ const PostListPage = () => {
     }
   };
 
+  const setPostPage = () => {
+    request
+      .get("post/list/page", {
+        params: {
+          writer_id: 0,
+          board_id: board_id,
+          page: 1,
+          size: 10,
+        },
+      })
+      .then((response) => {
+        setPostList(response.data.contents);
+        setLastPage(response.data.pages);
+      });
+  };
+
   useEffect(() => {
     showBoardName();
-  }, [params]);
+    setPostPage();
+  }, [board_id]);
 
   return (
     <Page>
       <h2 className="board-name">{boardName}</h2>
-      <ListTable params={params} />
+      <ListTable postList={postList} />
       <div className="list-bottom">
-        <PageNum className="wright-page" />
+        <PageNum className="wright-page" lastPage={lastPage} />
         <Button
           variant="outline-secondary"
           className="outline-secondary text-nowrap wright-button"
@@ -45,33 +64,6 @@ const PostListPage = () => {
         </Button>
       </div>
     </Page>
-  );
-};
-
-const PageNum = () => {
-  let [active, setActive] = useState(1);
-  let items = [];
-
-  const onClickActive = (number) => {
-    setActive(number);
-  };
-
-  for (let number = 1; number <= 5; number++) {
-    items.push(
-      <Pagination.Item
-        key={number}
-        active={number === active}
-        onClick={() => onClickActive(number)}
-      >
-        {number}
-      </Pagination.Item>
-    );
-  }
-
-  return (
-    <>
-      <Pagination>{items}</Pagination>
-    </>
   );
 };
 

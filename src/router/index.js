@@ -76,11 +76,11 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       {
-        path: "list/:params",
+        path: "list/:board_id",
         element: <PostListPage />,
       },
       {
-        path: "detail/:id",
+        path: "detail/:board_id/:post_id",
         element: <PostDetailPage />,
       },
     ],

@@ -6,39 +6,59 @@ import dateFomat from "src/libs/datetime";
 
 const ListTable = (props) => {
   const navigate = useNavigate();
+  const { board_id, post_id } = useParams();
   const { pathname } = useLocation();
 
-  const [postList, setPostList] = useState([]);
-  const [noticeList, setNoticeList] = useState([]);
+  // const [postList, setPostList] = useState([]);
+  // const [noticeList, setNoticeList] = useState([]);
 
-  const handleShowList = () => {
-    request
-      .get("post/list/page", {
-        params: {
-          board_id: props.params,
-        },
-      })
-      .then((response) => {
-        const content = response.data.contents;
-        setPostList([...content]);
-      });
-  };
+  // const handleShowList = () => {
+  //   request
+  //     .get("post/list/page", {
+  //       params: {
+  //         board_id: props.params,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       const content = response.data.contents;
+  //       setPostList([...content]);
+  //     });
+  // request
+  //   .get("notice/list", {
+  //     params: {
+  //       board_id: props.params,
+  //     },
+  //   })
+  //   .then((response) => {
+  //     setNoticeList(response.data);
+  //   });
+  // };
 
-  useEffect(() => {
-    handleShowList();
-  }, [props.params]);
+  // useEffect(() => {
+  //   handleShowList();
+  // }, [props.params]);
 
-  const onClickDetail = (data_id) => {
+  const onClickPostDetail = (id) => {
     request
       .get("post", {
         params: {
-          id: data_id,
+          id: id,
         },
       })
       .then((response) => {
-        navigate("/post/detail/" + data_id);
+        navigate("/post/detail/" + board_id + "/" + id);
       });
   };
+
+  // const onClickNoticeDetail = (data_id) => {
+  //   request
+  //     .get("notice", {
+  //       params: {
+  //         id: data_id,
+  //       },
+  //     })
+  //     .then((response) => navigate("/notice/detail/" + data_id));
+  // };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -66,12 +86,27 @@ const ListTable = (props) => {
           </tr>
         </thead>
         <tbody>
-          {postList.map((data) => {
+          {/* {noticeList.map((data) => {
             return (
               <tr
                 className="list-main"
                 key={data.id}
-                onClick={() => onClickDetail(data.id)}
+                onClick={() => onClickNoticeDetail(data.id)}
+              >
+                <td>{data.id}</td>
+                <td colspan="2">{data.title}</td>
+                <td>{data.writer_nick}</td>
+                <td>{data.view_cnt}</td>
+                <td>{dateFomat(data.created_at)}</td>
+              </tr>
+            );
+          })} */}
+          {props.postList.map((data) => {
+            return (
+              <tr
+                className="list-main"
+                key={data.id}
+                onClick={() => onClickPostDetail(data.id)}
               >
                 <td>{data.id}</td>
                 <td>{data.title}</td>
