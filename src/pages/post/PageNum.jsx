@@ -6,8 +6,14 @@ const PageNum = (props) => {
   let items = [];
   let [num, setNum] = useState({
     first_num: 1,
-    last_num: Number(props.lastPage < 5 ? props.lastPage : 5),
+    last_num: 5,
   });
+
+  useEffect(() => {
+    props.lastPage < 5
+      ? setNum({ ...num, last_num: props.lastPage })
+      : setNum({ ...num, last_num: 5 });
+  }, [props.lastPage]);
 
   const onClickActive = (number) => {
     setActive(number);
@@ -30,19 +36,20 @@ const PageNum = (props) => {
       return;
     } else {
       setNum({
-        first_num: num - 5,
-        last_num: num - 5,
+        first_num: num.first_num - 5,
+        last_num: num.last_num - 5,
       });
     }
   };
 
   const onClickNext = () => {
-    if (num.last_num == Number(props.lastPage)) {
+    if (num.last_num == props.lastPage) {
       return;
     } else {
       setNum({
-        first_num: num + 5,
-        last_num: Number(props.lastPage < num + 5 ? props.lastPage : num + 5),
+        first_num: num.first_num + 5,
+        last_num:
+          props.lastPage < num.last_num + 5 ? props.lastPage : num.last_num + 5,
         // props.lastPage가 num + 5 보다 작으면 props.lastPage로 되게.
       });
     }

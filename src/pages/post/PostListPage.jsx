@@ -11,6 +11,7 @@ const PostListPage = () => {
 
   const [boardName, setBoardName] = useState("");
   const [postList, setPostList] = useState([]);
+  const [noticeList, setNoticeList] = useState([]);
   const [lastPage, setLastPage] = useState(0);
 
   const showBoardName = () => {
@@ -45,15 +46,28 @@ const PostListPage = () => {
       });
   };
 
+  const showBoardNotice = () => {
+    request
+      .get("notice/list", {
+        params: {
+          board_id: board_id,
+        },
+      })
+      .then((response) => {
+        setNoticeList(response.data);
+      });
+  };
+
   useEffect(() => {
     showBoardName();
     setPostPage();
+    showBoardNotice();
   }, [board_id]);
 
   return (
     <Page>
       <h2 className="board-name">{boardName}</h2>
-      <ListTable postList={postList} />
+      <ListTable postList={postList} noticeList={noticeList} />
       <div className="list-bottom">
         <PageNum className="wright-page" lastPage={lastPage} />
         <Button

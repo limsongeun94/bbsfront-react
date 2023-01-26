@@ -44,17 +44,14 @@ const PostDetailPage = () => {
   };
 
   const [postList, setPostList] = useState([]);
+  const [noticeList, setNoticeList] = useState([]);
 
   const showPostList = () => {
     request
       .get("post/list/page", {
         params: {
           writer_id: 0,
-          // 1. post.board 이걸 사용할 수 있는데 문제는 비동기라서
-          // 명백하게 showDetailPage 이 완료된 후에 지금 이 함수를 실행하도록 하거나
-          // 2. url에 board_id 정보를 넣어서 그걸 받아 쓰면 돼.
-          // 페이지네이션까지 신경쓰려면 2번 방법이 편할듯..?
-          board_id: board_id, //얘는 어떻게해? 방법은 두가지야.
+          board_id: board_id,
           page: 1,
           size: 10,
         },
@@ -64,9 +61,22 @@ const PostDetailPage = () => {
       });
   };
 
+  const showBoardNotice = () => {
+    request
+      .get("notice/list", {
+        params: {
+          board_id: board_id,
+        },
+      })
+      .then((response) => {
+        setNoticeList(response.data);
+      });
+  };
+
   useEffect(() => {
     showDetailPage();
     showPostList();
+    showBoardNotice();
   }, [post_id]);
 
   return (
@@ -79,7 +89,7 @@ const PostDetailPage = () => {
         <hr className="post-detail-line" />
         <PostDetailReply post_id={post_id} />
       </div>
-      <ListTable postList={postList} />
+      <ListTable postList={postList} noticeList={noticeList} />
     </Page>
   );
 };

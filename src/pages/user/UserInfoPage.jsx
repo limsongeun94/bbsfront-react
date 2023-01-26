@@ -16,7 +16,6 @@ const UserInfoPage = () => {
 
   const showUserInfo = () => {
     request.get("user/info").then((response) => {
-      console.log("유저정보", response.data);
       setUserInfo({
         id: response.data.id,
         name: response.data.name,
@@ -38,7 +37,6 @@ const UserInfoPage = () => {
         },
       })
       .then((response) => {
-        console.log("게시글", response.data.contents);
         setPostList(response.data.contents);
       });
   };
