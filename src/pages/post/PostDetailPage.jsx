@@ -1,7 +1,7 @@
 import Page from "src/components/Page";
 import PostDetailInfo from "./PostDetailInfo";
 import PostDetailMain from "./PostDetailMain";
-import PostDetailReply from "./PostDetailReply";
+import PostDetailReply from "./PostDetailReply-1";
 import ListTable from "./ListTable";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
