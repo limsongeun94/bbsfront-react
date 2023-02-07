@@ -38,6 +38,7 @@ const PostDetailPage = () => {
     body: "",
     thumbs_up_cnt: 0,
     thumbs_down_cnt: 0,
+    replies: [],
   });
 
   const showDetailPage = () => {
@@ -104,7 +105,7 @@ const PostDetailPage = () => {
         <hr className="post-detail-line" />
         <PostDetailMain post={post} />
         <hr className="post-detail-line" />
-        <PostDetailReply />
+        <PostDetailReply post={post} />
       </div>
       <div className="post-detail-btn-wrapper">
         <div className="list-top-btn">
