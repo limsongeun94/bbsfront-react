@@ -9,35 +9,6 @@ const ListTable = (props) => {
   const { board_id, post_id } = useParams();
   const { pathname } = useLocation();
 
-  // const [postList, setPostList] = useState([]);
-  // const [noticeList, setNoticeList] = useState([]);
-
-  // const handleShowList = () => {
-  //   request
-  //     .get("post/list/page", {
-  //       params: {
-  //         board_id: props.params,
-  //       },
-  //     })
-  //     .then((response) => {
-  //       const content = response.data.contents;
-  //       setPostList([...content]);
-  //     });
-  // request
-  //   .get("notice/list", {
-  //     params: {
-  //       board_id: props.params,
-  //     },
-  //   })
-  //   .then((response) => {
-  //     setNoticeList(response.data);
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   handleShowList();
-  // }, [props.params]);
-
   const onClickPostDetail = (id) => {
     request
       .get("post", {

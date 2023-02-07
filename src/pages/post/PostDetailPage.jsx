@@ -6,9 +6,18 @@ import ListTable from "./ListTable";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { request } from "src/libs/request";
+import { Button } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { setPostId } from "./../../store/post_id";
 
 const PostDetailPage = () => {
+  let dispatch = useDispatch();
+  const navigate = useNavigate();
   const { board_id, post_id } = useParams();
+
+  useEffect(() => {
+    dispatch(setPostId(post_id));
+  }, []);
 
   const [post, setPost] = useState({
     id: 0,
@@ -73,6 +82,14 @@ const PostDetailPage = () => {
       });
   };
 
+  const removePost = () => {
+    request.delete("post", {
+      params: {
+        id: post_id,
+      },
+    });
+  };
+
   useEffect(() => {
     showDetailPage();
     showPostList();
@@ -87,7 +104,51 @@ const PostDetailPage = () => {
         <hr className="post-detail-line" />
         <PostDetailMain post={post} />
         <hr className="post-detail-line" />
-        <PostDetailReply post_id={post_id} />
+        <PostDetailReply />
+      </div>
+      <div className="post-detail-btn-wrapper">
+        <div className="list-top-btn">
+          <Button
+            variant="outline-secondary"
+            className="outline-secondary text-nowrap"
+            onClick={() => {
+              navigate("/post/list/" + board_id);
+            }}
+          >
+            목록
+          </Button>
+          <Button
+            variant="outline-secondary"
+            className="outline-secondary text-nowrap"
+            onClick={(e) => window.scrollTo(0, 0)}
+          >
+            맨위로
+          </Button>
+        </div>
+        <div className="edit-btn">
+          <Button
+            variant="outline-secondary"
+            className="outline-secondary text-nowrap"
+          >
+            수정
+          </Button>
+          <Button
+            variant="outline-secondary"
+            className="outline-secondary text-nowrap"
+            onClick={removePost}
+          >
+            삭제
+          </Button>
+          <Button
+            variant="outline-secondary"
+            className="outline-secondary text-nowrap"
+            onClick={() => {
+              navigate("/post/writer");
+            }}
+          >
+            글쓰기
+          </Button>
+        </div>
       </div>
       <ListTable postList={postList} noticeList={noticeList} />
     </Page>

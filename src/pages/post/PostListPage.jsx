@@ -2,11 +2,15 @@ import Page from "src/components/Page";
 import { Button } from "react-bootstrap";
 import ListTable from "src/pages/post/ListTable";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { request } from "src/libs/request";
 import PageNum from "./PageNum";
 
 const PostListPage = () => {
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = searchParams.get("page");
+
   const { board_id } = useParams();
 
   const [boardName, setBoardName] = useState("");
@@ -36,7 +40,7 @@ const PostListPage = () => {
         params: {
           writer_id: 0,
           board_id: board_id,
-          page: 1,
+          page: page,
           size: 10,
         },
       })
@@ -59,8 +63,11 @@ const PostListPage = () => {
   };
 
   useEffect(() => {
-    showBoardName();
     setPostPage();
+  }, [page]);
+
+  useEffect(() => {
+    showBoardName();
     showBoardNotice();
   }, [board_id]);
 
@@ -69,10 +76,18 @@ const PostListPage = () => {
       <h2 className="board-name">{boardName}</h2>
       <ListTable postList={postList} noticeList={noticeList} />
       <div className="list-bottom">
-        <PageNum className="wright-page" lastPage={lastPage} />
+        <PageNum
+          className="wright-page"
+          lastPage={lastPage}
+          page={page}
+          setSearchParams={setSearchParams}
+        />
         <Button
           variant="outline-secondary"
           className="outline-secondary text-nowrap wright-button"
+          onClick={() => {
+            navigate("/post/writer");
+          }}
         >
           글쓰기
         </Button>

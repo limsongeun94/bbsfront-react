@@ -477,3 +477,18 @@ a:visited {
 .write-btn-wrapper {
   text-align: center;
 }
+
+.post-detail-btn-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 50px;
+}
+
+:is(.list-top-btn, .edit-btn) > Button {
+  margin-right: 10px;
+}
+
+.edit-btn > Button:last-child {
+  margin-right: 0;
+}

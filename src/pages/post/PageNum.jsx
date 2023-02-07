@@ -15,15 +15,21 @@ const PageNum = (props) => {
       : setNum({ ...num, last_num: 5 });
   }, [props.lastPage]);
 
+  useEffect(() => {
+    setActive(props.page);
+  }, [props.page]);
+  // 주소창에 ?page=어쩌구 에서 어쩌구가 바뀌면 active가 되게.
+
   const onClickActive = (number) => {
     setActive(number);
+    props.setSearchParams({ page: number });
   };
 
   for (let number = num.first_num; number <= num.last_num; number++) {
     items.push(
       <Pagination.Item
         key={number}
-        active={number === active}
+        active={number == active}
         onClick={() => onClickActive(number)}
       >
         {number}
@@ -55,26 +61,31 @@ const PageNum = (props) => {
     }
   };
 
-  // for (let number = 1; number <= 5; number++) {
-  //   items.push(
-  //     <Pagination.Item
-  //       key={number}
-  //       active={number === active}
-  //       onClick={() => onClickActive(number)}
-  //     >
-  //       {number}
-  //     </Pagination.Item>
-  //   );
-  // }
+  const onClickFirst = () => {
+    setNum({
+      first_num: 1,
+      last_num:
+        props.lastPage < num.last_num + 5 ? props.lastPage : num.last_num + 5,
+    });
+    setActive(1);
+  };
+
+  const onClickLast = () => {
+    setNum({
+      first_num: props.lastPage < num.last_num + 5 ? 1 : num.last_num - 4,
+      last_num: props.lastPage,
+    });
+    setActive(props.lastPage);
+  };
 
   return (
     <>
       <Pagination>
-        <Pagination.First /> {/* 맨 첫번째 */}
+        <Pagination.First onClick={onClickFirst} /> {/* 맨 첫번째 */}
         <Pagination.Prev onClick={onClickPrev} /> {/* 첫번째에서 -1 ~ -5 */}
         {items}
-        <Pagination.Next /> {/* 마지막에서 +1 ~ +5 */}
-        <Pagination.Last onClick={onClickNext} /> {/* 맨 마지막 */}
+        <Pagination.Next onClick={onClickNext} /> {/* 마지막에서 +1 ~ +5 */}
+        <Pagination.Last onClick={onClickLast} /> {/* 맨 마지막 */}
       </Pagination>
     </>
   );

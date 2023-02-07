@@ -65,6 +65,7 @@ const IndexPage = (props) => {
             {newPostList.map((data) => (
               <ThumbnailPost
                 key={data.id}
+                board_id={data.board_id}
                 board_name={data.board_name}
                 title={data.title}
                 replies_cnt={data.replies_cnt}
@@ -79,6 +80,7 @@ const IndexPage = (props) => {
             {bestPostList.map((data) => (
               <ThumbnailPost
                 key={data.id}
+                board_id={data.board_id}
                 board_name={data.board_name}
                 title={data.title}
                 replies_cnt={data.replies_cnt}
@@ -146,7 +148,7 @@ const ThumbnailPost = (props) => {
   return (
     <tr
       onClick={() => {
-        navigate("post/detail/" + props.id);
+        navigate("post/detail/" + props.board_id + "/" + props.id);
       }}
     >
       <td>{props.board_name}</td>
