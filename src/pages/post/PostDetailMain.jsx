@@ -7,36 +7,29 @@ const PostDetailMain = (props) => {
   const [userId, setUserId] = useState("");
 
   const onClickThumbsUp = () => {
-    request.post("/thumbs", {
-      user_id: userId,
-      post_id: props.post.id,
-      reply_id: 0,
-      value: true,
-    });
+    request
+      .post("/thumbs", {
+        user_id: userId,
+        post_id: props.post.id,
+        reply_id: 0,
+        value: true,
+      })
+      .then((response) => {
+        props.showDetailPage();
+      });
   };
 
   const onClickThumbsDown = () => {
-    request.post("/thumbs", {
-      user_id: userId,
-      post_id: props.post.id,
-      reply_id: 0,
-      value: false,
-    });
-  };
-
-  const getPost = () => {
     request
-      .get("/post", {
-        params: {
-          id: props.post.id,
-        },
+      .post("/thumbs", {
+        user_id: userId,
+        post_id: props.post.id,
+        reply_id: 0,
+        value: false,
       })
-      .then((response) =>
-        props.getThumbs(
-          response.data.thumbs_up_cnt,
-          response.data.thumbs_down_cnt
-        )
-      );
+      .then((response) => {
+        props.showDetailPage();
+      });
   };
 
   const setUserInfo = () => {
@@ -45,7 +38,6 @@ const PostDetailMain = (props) => {
 
   useEffect(() => {
     setUserInfo();
-    getPost();
   }, []);
 
   return (

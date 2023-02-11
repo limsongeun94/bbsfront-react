@@ -65,6 +65,7 @@ const PostDetailPage = () => {
       })
       .then((response) => {
         setPostList(response.data.contents);
+        setLastPage(response.data.pages);
       });
   };
 
@@ -99,16 +100,13 @@ const PostDetailPage = () => {
         },
       })
       .then((response) => {
+        setPostList(response.data.contents);
         setLastPage(response.data.pages);
       });
   };
 
   const getReply = (data) => {
     setPost({ ...post, replies: data });
-  };
-
-  const getThumbs = (data1, data2) => {
-    setPost({ ...post, thumbs_up_cnt: data1, thumbs_down_cnt: data2 });
   };
 
   useEffect(() => {
@@ -127,7 +125,7 @@ const PostDetailPage = () => {
       <div className="post-detail-wrapper">
         <PostDetailInfo post={post} />
         <hr className="post-detail-line" />
-        <PostDetailMain post={post} getThumbs={getThumbs} />
+        <PostDetailMain post={post} showDetailPage={showDetailPage} />
         <hr className="post-detail-line" />
         <PostDetailReply post={post} getReply={getReply} />
       </div>
