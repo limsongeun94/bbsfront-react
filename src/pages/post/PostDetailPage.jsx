@@ -3,22 +3,19 @@ import PostDetailInfo from "./PostDetailInfo";
 import PostDetailMain from "./PostDetailMain";
 import PostDetailReply from "./PostDetailReply-1";
 import ListTable from "./ListTable";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { request } from "src/libs/request";
 import { Button } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { setPostId } from "./../../store/post_id";
+import PageNum from "./../post/PageNum";
 
 const PostDetailPage = () => {
-  let dispatch = useDispatch();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = searchParams.get("page");
   const { board_id, post_id } = useParams();
 
-  useEffect(() => {
-    dispatch(setPostId(post_id));
-  }, []);
-
+  const [lastPage, setLastPage] = useState(0);
   const [post, setPost] = useState({
     id: 0,
     board: {
@@ -91,11 +88,38 @@ const PostDetailPage = () => {
     });
   };
 
+  const setPostPage = () => {
+    request
+      .get("post/list/page", {
+        params: {
+          writer_id: 0,
+          board_id: board_id,
+          page: page,
+          size: 10,
+        },
+      })
+      .then((response) => {
+        setLastPage(response.data.pages);
+      });
+  };
+
+  const getReply = (data) => {
+    setPost({ ...post, replies: data });
+  };
+
+  const getThumbs = (data1, data2) => {
+    setPost({ ...post, thumbs_up_cnt: data1, thumbs_down_cnt: data2 });
+  };
+
   useEffect(() => {
     showDetailPage();
     showPostList();
     showBoardNotice();
   }, [post_id]);
+
+  useEffect(() => {
+    setPostPage();
+  }, [page]);
 
   return (
     <Page>
@@ -103,9 +127,9 @@ const PostDetailPage = () => {
       <div className="post-detail-wrapper">
         <PostDetailInfo post={post} />
         <hr className="post-detail-line" />
-        <PostDetailMain post={post} />
+        <PostDetailMain post={post} getThumbs={getThumbs} />
         <hr className="post-detail-line" />
-        <PostDetailReply post={post} />
+        <PostDetailReply post={post} getReply={getReply} />
       </div>
       <div className="post-detail-btn-wrapper">
         <div className="list-top-btn">
@@ -152,6 +176,11 @@ const PostDetailPage = () => {
         </div>
       </div>
       <ListTable postList={postList} noticeList={noticeList} />
+      <PageNum
+        lastPage={lastPage}
+        page={page}
+        setSearchParams={setSearchParams}
+      />
     </Page>
   );
 };

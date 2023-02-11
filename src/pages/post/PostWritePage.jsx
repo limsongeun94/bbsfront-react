@@ -18,9 +18,6 @@ const PostWriterPage = () => {
     user_nick: "",
   });
 
-  // let user_id = 0;
-  // let user_nick = "";
-
   const boardNameList = () => {
     request.get("board/list/").then((response) => {
       setBoardList(response.data);
@@ -56,9 +53,6 @@ const PostWriterPage = () => {
       .then((res) => {
         navigate("/post/list/" + selected);
       });
-    // console.log(mainText);
-    // console.log(nameInput);
-    // console.log(selected);
   };
 
   useEffect(() => {
