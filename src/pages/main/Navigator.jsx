@@ -45,7 +45,7 @@ const Navigator = (props) => {
             key={data.id}
             eventKey={"link-" + data.id}
             onClick={() => {
-              navigate("/post/list/" + data.id);
+              navigate("/post/list/" + data.id + "?page=1");
             }}
           >
             {data.name}

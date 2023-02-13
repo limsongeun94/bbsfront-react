@@ -163,7 +163,7 @@ const ThumbnailBoard = (props) => {
   return (
     <tr
       onClick={() => {
-        navigate("post/list/" + props.id);
+        navigate("post/list/" + props.id + "?page=1");
       }}
     >
       <td>{props.name}</td>
@@ -176,7 +176,7 @@ const THumbnailNotice = (props) => {
   return (
     <tr
       onClick={() => {
-        navigate("notice/detail/" + props.id);
+        navigate("notice/detail/" + props.id + "?page=1");
       }}
     >
       <td>{props.title}</td>

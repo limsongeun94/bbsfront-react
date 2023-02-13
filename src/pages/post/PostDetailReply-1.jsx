@@ -4,9 +4,50 @@ import { request } from "src/libs/request";
 import dateFomat from "src/libs/datetime";
 
 const PostDetailReply = (props) => {
+  const [userId, setUserId] = useState("");
+
+  const onClickThumbsUp = () => {
+    request
+      .post("/thumbs", {
+        user_id: userId,
+        post_id: 0,
+        reply_id: props.data.id,
+        value: true,
+      })
+      .then((response) => {
+        props.showDetailPage();
+      });
+  };
+
+  const onClickThumbsDown = () => {
+    request
+      .post("/thumbs", {
+        user_id: userId,
+        post_id: 0,
+        reply_id: props.data.id,
+        value: false,
+      })
+      .then((response) => {
+        props.showDetailPage();
+      });
+  };
+
+  const setUserInfo = () => {
+    request.get("/user/info").then((response) => setUserId(response.data.id));
+  };
+
+  useEffect(() => {
+    setUserInfo();
+  }, []);
+
   return (
     <>
-      <ReplyView post={props.post} getReply={props.getReply} />
+      <ReplyView
+        post={props.post}
+        getReply={props.getReply}
+        onClickThumbsUp={onClickThumbsUp}
+        onClickThumbsDown={onClickThumbsDown}
+      />
       <ReplyCreate post={props.post} getReply={props.getReply} />
     </>
   );
@@ -50,6 +91,7 @@ const ReplyView = (props) => {
             <Button
               variant="outline-secondary"
               className="outline-secondary text-nowrap margin-right"
+              onClick={props.onClickThumbsUp}
             >
               <span>
                 <img src="/thumbs-up.png" width="18px" />
@@ -59,6 +101,7 @@ const ReplyView = (props) => {
             <Button
               variant="outline-secondary"
               className="outline-secondary text-nowrap"
+              onClick={props.onClickThumbsDown}
             >
               <span>
                 <img src="/thumbs-down.png" width="18px" />
@@ -82,7 +125,7 @@ const ReplyView = (props) => {
 
   const ReplycontainerWithoutBtn = (props) => {
     return (
-      <div className="reply-view-wrapper" style={{ minHeight: "107px" }}>
+      <div className="rereply-view-wrapper" style={{ minHeight: "107px" }}>
         <div className="reply-head">
           <div>{props.data.writer_nick}</div>
           <div>{dateFomat(props.data.created_at)}</div>
@@ -93,6 +136,7 @@ const ReplyView = (props) => {
             <Button
               variant="outline-secondary"
               className="outline-secondary text-nowrap margin-right"
+              onClick={props.onClickThumbsUp}
             >
               <span>
                 <img src="/thumbs-up.png" width="18px" />
@@ -102,6 +146,7 @@ const ReplyView = (props) => {
             <Button
               variant="outline-secondary"
               className="outline-secondary text-nowrap"
+              onClick={props.onClickThumbsDown}
             >
               <span>
                 <img src="/thumbs-down.png" width="18px" />
@@ -119,26 +164,38 @@ const ReplyView = (props) => {
       {props.post.replies.map((data) => {
         return (
           <>
-            <Replycontainer key={data.id} data={data} setReReply={setReReply} />
+            <Replycontainer
+              key={data.id}
+              data={data}
+              setReReply={setReReply}
+              onClickThumbsUp={props.onClickThumbsUp}
+              onClickThumbsDown={props.onClickThumbsDown}
+            />
             <OnClickReReplyCreate key={data.id} data={data} post={props.post} />
             {data.replies.map((data) => {
               return (
-                <>
-                  <div style={{ display: "flex" }}>
-                    <img
-                      src="/reply_arrow.png"
-                      width="100px"
-                      style={{ transform: "rotate(0.5turn)" }}
+                <div
+                  style={{
+                    display: "flex",
+                    background: "rgb(244, 244, 244)",
+                    border: "1px solid #212529",
+                  }}
+                >
+                  <img
+                    src="/reply_arrow.png"
+                    width="100px"
+                    style={{ transform: "rotate(0.5turn)" }}
+                  />
+                  <div style={{ flexGrow: "1" }}>
+                    <ReplycontainerWithoutBtn
+                      key={data.id}
+                      data={data}
+                      setReReply={setReReply}
+                      onClickThumbsUp={props.onClickThumbsUp}
+                      onClickThumbsDown={props.onClickThumbsDown}
                     />
-                    <div style={{ flexGrow: "1" }}>
-                      <ReplycontainerWithoutBtn
-                        key={data.id}
-                        data={data}
-                        setReReply={setReReply}
-                      />
-                    </div>
                   </div>
-                </>
+                </div>
               );
             })}
           </>
@@ -174,24 +231,22 @@ const ReplyCreate = (props) => {
   };
 
   return (
-    <>
-      <div className="reply-write-wrapper">
-        <textarea
-          placeholder="내용을 작성하세요."
-          onChange={(e) => setCreateReply(e.target.value)}
-          value={createReply}
-        />
-        <div className="reply-submit-wrapper">
-          <Button
-            variant="outline-secondary"
-            className="outline-secondary text-nowrap"
-            onClick={handleCreateReply}
-          >
-            등록
-          </Button>
-        </div>
+    <div className="reply-write-wrapper">
+      <textarea
+        placeholder="내용을 작성하세요."
+        onChange={(e) => setCreateReply(e.target.value)}
+        value={createReply}
+      />
+      <div className="reply-submit-wrapper">
+        <Button
+          variant="outline-secondary"
+          className="outline-secondary text-nowrap"
+          onClick={handleCreateReply}
+        >
+          등록
+        </Button>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -221,24 +276,22 @@ const ReReplyCreate = (props) => {
   };
 
   return (
-    <>
-      <div className="reply-write-wrapper">
-        <textarea
-          placeholder="내용을 작성하세요."
-          onChange={(e) => setCreateReply(e.target.value)}
-          value={createReply}
-        />
-        <div className="reply-submit-wrapper">
-          <Button
-            variant="outline-secondary"
-            className="outline-secondary text-nowrap"
-            onClick={handleCreateReReply}
-          >
-            등록
-          </Button>
-        </div>
+    <div className="rereply-write-wrapper">
+      <textarea
+        placeholder="내용을 작성하세요."
+        onChange={(e) => setCreateReply(e.target.value)}
+        value={createReply}
+      />
+      <div className="reply-submit-wrapper">
+        <Button
+          variant="outline-secondary"
+          className="outline-secondary text-nowrap"
+          onClick={handleCreateReReply}
+        >
+          등록
+        </Button>
       </div>
-    </>
+    </div>
   );
 };
 
