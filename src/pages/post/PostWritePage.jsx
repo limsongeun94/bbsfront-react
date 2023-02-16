@@ -30,10 +30,6 @@ const PostWriterPage = () => {
         user_id: response.data.id,
         user_nick: response.data.nick,
       });
-      // user_id = response.data.id;
-      // user_nick = response.data.nick;
-
-      // console.log(user_id, user_nick);
     });
   };
 
@@ -42,23 +38,30 @@ const PostWriterPage = () => {
   };
 
   const uploadPost = () => {
-    request
-      .post("/post", {
-        title: nameInput,
-        body: mainText,
-        writer_nick: userInfo.user_nick,
-        writer_id: userInfo.user_id,
-        board_id: selected,
-      })
-      .then((res) => {
-        navigate("/post/list/" + selected);
-      });
+    if (nameInput == "") {
+      alert("제목을 입력하세요.");
+    } else if (selected == "") {
+      alert("게시판을 선택하세요.");
+    } else if (mainText == "") {
+      alert("내용을 입력하세요.");
+    } else {
+      request
+        .post("/post", {
+          title: nameInput,
+          body: mainText,
+          writer_nick: userInfo.user_nick,
+          writer_id: userInfo.user_id,
+          board_id: selected,
+        })
+        .then((res) => {
+          navigate("/post/list/" + selected);
+        });
+    }
   };
 
   useEffect(() => {
     boardNameList();
     getUserInfo();
-    // console.log(userInfo);
   }, []);
 
   return (

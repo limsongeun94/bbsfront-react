@@ -4,7 +4,7 @@ import PostDetailMain from "./PostDetailMain";
 import PostDetailReply from "./PostDetailReply-1";
 import ListTable from "./ListTable";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { request } from "src/libs/request";
 import { Button } from "react-bootstrap";
 import PageNum from "./../post/PageNum";
@@ -50,6 +50,21 @@ const PostDetailPage = () => {
       });
   };
 
+  const showReply = () => {
+    request
+      .get("/post/reply", {
+        params: {
+          post_id: post_id,
+        },
+      })
+      .then((response) => {
+        // setPost({ ...post, replies: response.data });
+        // console.log("클릭후", response.data);
+      });
+  };
+
+  const editPost = () => {};
+
   const [postList, setPostList] = useState([]);
   const [noticeList, setNoticeList] = useState([]);
 
@@ -81,13 +96,35 @@ const PostDetailPage = () => {
       });
   };
 
-  const removePost = () => {
-    request.delete("post", {
-      params: {
-        id: post_id,
-      },
-    });
+  const [showModal, setShowModal] = useState(false);
+
+  const removePost = (e) => {
+    request
+      .delete("post", {
+        params: {
+          id: post_id,
+        },
+      })
+      .then((response) => {
+        // window.scrollTo(0, 0);
+        setShowModal(true);
+      });
   };
+
+  useEffect(() => {
+    if (showModal) {
+      document.body.style.cssText = `
+      position: fixed; 
+      top: window.scrollTo(0, 0);;
+      overflow-y: scroll;
+      width: 100%;`;
+    }
+    return () => {
+      const scrollY = document.body.style.top;
+      document.body.style.cssText = "";
+      window.scrollTo(0, parseInt(scrollY || "0", 10) * -1);
+    };
+  }, [showModal]);
 
   const setPostPage = () => {
     request
@@ -105,6 +142,18 @@ const PostDetailPage = () => {
       });
   };
 
+  const [showWriteBtn, setShowWriteBtn] = useState(true);
+
+  const getUserInfo = () => {
+    request
+      .get("/user/info")
+      .catch((error) =>
+        error.response.status == 403
+          ? setShowWriteBtn(false)
+          : setShowWriteBtn(true)
+      );
+  };
+
   const getReply = (data) => {
     setPost({ ...post, replies: data });
   };
@@ -119,6 +168,10 @@ const PostDetailPage = () => {
     setPostPage();
   }, [page]);
 
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
   return (
     <Page>
       <h2 className="board-name">{post.board.name}</h2>
@@ -127,7 +180,11 @@ const PostDetailPage = () => {
         <hr className="post-detail-line" />
         <PostDetailMain post={post} showDetailPage={showDetailPage} />
         <hr className="post-detail-line" />
-        <PostDetailReply post={post} getReply={getReply} />
+        <PostDetailReply
+          post={post}
+          getReply={getReply}
+          showReply={showReply}
+        />
       </div>
       <div className="post-detail-btn-wrapper">
         <div className="list-top-btn">
@@ -148,30 +205,33 @@ const PostDetailPage = () => {
             맨위로
           </Button>
         </div>
-        <div className="edit-btn">
-          <Button
-            variant="outline-secondary"
-            className="outline-secondary text-nowrap"
-          >
-            수정
-          </Button>
-          <Button
-            variant="outline-secondary"
-            className="outline-secondary text-nowrap"
-            onClick={removePost}
-          >
-            삭제
-          </Button>
-          <Button
-            variant="outline-secondary"
-            className="outline-secondary text-nowrap"
-            onClick={() => {
-              navigate("/post/writer");
-            }}
-          >
-            글쓰기
-          </Button>
-        </div>
+        {showWriteBtn ? (
+          <div className="edit-btn">
+            <Button
+              variant="outline-secondary"
+              className="outline-secondary text-nowrap"
+              onClick={editPost}
+            >
+              수정
+            </Button>
+            <Button
+              variant="outline-secondary"
+              className="outline-secondary text-nowrap"
+              onClick={removePost}
+            >
+              삭제
+            </Button>
+            <Button
+              variant="outline-secondary"
+              className="outline-secondary text-nowrap"
+              onClick={() => {
+                navigate("/post/writer");
+              }}
+            >
+              글쓰기
+            </Button>
+          </div>
+        ) : null}
       </div>
       <ListTable postList={postList} noticeList={noticeList} />
       <PageNum
@@ -179,6 +239,21 @@ const PostDetailPage = () => {
         page={page}
         setSearchParams={setSearchParams}
       />
+      {showModal ? (
+        <div className="remove_modal_back">
+          <div className="remove_modal">
+            <div>삭제된 게시글입니다.</div>
+            <Button
+              variant="outline-secondary"
+              className="outline-secondary text-nowrap"
+              style={{ marginTop: "20px" }}
+              onClick={() => navigate("/post/list/" + board_id)}
+            >
+              메인으로
+            </Button>
+          </div>
+        </div>
+      ) : null}
     </Page>
   );
 };

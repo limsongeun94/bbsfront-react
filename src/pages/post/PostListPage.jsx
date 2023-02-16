@@ -62,6 +62,18 @@ const PostListPage = () => {
       });
   };
 
+  const [showWriteBtn, setShowWriteBtn] = useState(true);
+
+  const getUserInfo = () => {
+    request
+      .get("/user/info")
+      .catch((error) =>
+        error.response.status == 403
+          ? setShowWriteBtn(false)
+          : setShowWriteBtn(true)
+      );
+  };
+
   useEffect(() => {
     setPostPage();
   }, [page]);
@@ -70,6 +82,10 @@ const PostListPage = () => {
     showBoardName();
     showBoardNotice();
   }, [board_id]);
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
 
   return (
     <Page>
@@ -82,15 +98,17 @@ const PostListPage = () => {
           page={page}
           setSearchParams={setSearchParams}
         />
-        <Button
-          variant="outline-secondary"
-          className="outline-secondary text-nowrap wright-button"
-          onClick={() => {
-            navigate("/post/writer");
-          }}
-        >
-          글쓰기
-        </Button>
+        {showWriteBtn ? (
+          <Button
+            variant="outline-secondary"
+            className="outline-secondary text-nowrap wright-button"
+            onClick={() => {
+              navigate("/post/writer");
+            }}
+          >
+            글쓰기
+          </Button>
+        ) : null}
       </div>
     </Page>
   );

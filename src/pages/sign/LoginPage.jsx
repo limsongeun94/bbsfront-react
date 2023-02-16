@@ -24,7 +24,8 @@ const LoginPage = (props) => {
       })
       .then((res) => {
         dispatch(setUser(res.data.user));
-      });
+      })
+      .catch((error) => alert("오류가 발생했습니다."));
   };
 
   const handleOnKeyPress = (e) => {

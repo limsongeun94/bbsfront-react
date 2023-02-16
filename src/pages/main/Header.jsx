@@ -44,7 +44,7 @@ const Header = (props) => {
             />
             게시판
           </Navbar.Brand>
-          <InputGroup className="mb-3">
+          <InputGroup className="mb-3" style={{ zIndex: "0" }}>
             <DropdownButton
               variant="outline-secondary"
               title="검색내용"

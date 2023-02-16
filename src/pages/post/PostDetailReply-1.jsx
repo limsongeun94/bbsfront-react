@@ -1,34 +1,44 @@
 import { Button } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { request } from "src/libs/request";
 import dateFomat from "src/libs/datetime";
 
 const PostDetailReply = (props) => {
   const [userId, setUserId] = useState("");
 
-  const onClickThumbsUp = () => {
+  const handleRemove = (reply_id) => {
+    request
+      .delete("/post/reply", {
+        params: {
+          id: reply_id,
+        },
+      })
+      .then((response) => console.log("안녕"));
+  };
+
+  const onClickThumbsUp = (data) => {
     request
       .post("/thumbs", {
-        user_id: userId,
+        user_id: 0,
         post_id: 0,
-        reply_id: props.data.id,
+        reply_id: data.id,
         value: true,
       })
       .then((response) => {
-        props.showDetailPage();
+        props.showReply();
       });
   };
 
-  const onClickThumbsDown = () => {
+  const onClickThumbsDown = (data) => {
     request
       .post("/thumbs", {
-        user_id: userId,
+        user_id: 0,
         post_id: 0,
-        reply_id: props.data.id,
+        reply_id: data.id,
         value: false,
       })
       .then((response) => {
-        props.showDetailPage();
+        props.showReply();
       });
   };
 
@@ -45,8 +55,10 @@ const PostDetailReply = (props) => {
       <ReplyView
         post={props.post}
         getReply={props.getReply}
+        userId={userId}
         onClickThumbsUp={onClickThumbsUp}
         onClickThumbsDown={onClickThumbsDown}
+        handleRemove={handleRemove}
       />
       <ReplyCreate post={props.post} getReply={props.getReply} />
     </>
@@ -54,10 +66,13 @@ const PostDetailReply = (props) => {
 };
 
 const ReplyView = (props) => {
+  console.log("처음", props.post.replies);
+
   const [reReply, setReReply] = useState(0);
+  const [clickReply, setClickReply] = useState(false);
 
   const OnClickReReplyCreate = (_props) => {
-    if (reReply == _props.data.id) {
+    if (reReply == _props.data.id && clickReply == true) {
       return (
         <div style={{ display: "flex" }}>
           <img
@@ -85,8 +100,16 @@ const ReplyView = (props) => {
           <div>{props.data.writer_nick}</div>
           <div>{dateFomat(props.data.created_at)}</div>
         </div>
-        <div className="reply-body">{props.data.body}</div>
-        <div class="reply-foot">
+        <div
+          className="reply-body"
+          onClick={() => {
+            props.setReReply(props.data.id);
+            props.setClickReply(!props.clickReply);
+          }}
+        >
+          {props.data.body}
+        </div>
+        <div className="reply-foot">
           <div>
             <Button
               variant="outline-secondary"
@@ -109,15 +132,17 @@ const ReplyView = (props) => {
               <span>{props.data.thumbs_down_cnt}</span>
             </Button>
           </div>
-          <div style={{ textAlign: "center", marginTop: "10px" }}>
-            <Button
-              variant="outline-secondary"
-              className="outline-secondary text-nowrap"
-              onClick={() => props.setReReply(props.data.id)}
-            >
-              답글
-            </Button>
-          </div>
+          {props.data.writer_id == props.userId ? (
+            <div style={{ textAlign: "center", marginTop: "10px" }}>
+              <Button
+                variant="danger"
+                className=" text-nowrap"
+                onClick={props.handleRemove}
+              >
+                삭제
+              </Button>
+            </div>
+          ) : null}
         </div>
       </div>
     );
@@ -125,13 +150,13 @@ const ReplyView = (props) => {
 
   const ReplycontainerWithoutBtn = (props) => {
     return (
-      <div className="rereply-view-wrapper" style={{ minHeight: "107px" }}>
+      <div className="rereply-view-wrapper">
         <div className="reply-head">
           <div>{props.data.writer_nick}</div>
           <div>{dateFomat(props.data.created_at)}</div>
         </div>
         <div className="reply-body">{props.data.body}</div>
-        <div class="reply-foot">
+        <div className="reply-foot">
           <div>
             <Button
               variant="outline-secondary"
@@ -154,6 +179,17 @@ const ReplyView = (props) => {
               <span>{props.data.thumbs_down_cnt}</span>
             </Button>
           </div>
+          {props.data.writer_id == props.userId ? (
+            <div style={{ textAlign: "center", marginTop: "10px" }}>
+              <Button
+                variant="danger"
+                className=" text-nowrap"
+                onClick={props.handleRemove}
+              >
+                삭제
+              </Button>
+            </div>
+          ) : null}
         </div>
       </div>
     );
@@ -163,18 +199,22 @@ const ReplyView = (props) => {
     <>
       {props.post.replies.map((data) => {
         return (
-          <>
+          <Fragment key={data.id}>
             <Replycontainer
-              key={data.id}
               data={data}
               setReReply={setReReply}
-              onClickThumbsUp={props.onClickThumbsUp}
-              onClickThumbsDown={props.onClickThumbsDown}
+              setClickReply={setClickReply}
+              clickReply={clickReply}
+              userId={props.userId}
+              onClickThumbsUp={() => props.onClickThumbsUp(data)}
+              onClickThumbsDown={() => props.onClickThumbsDown(data)}
+              handleRemove={() => props.handleRemove(data.id)}
             />
-            <OnClickReReplyCreate key={data.id} data={data} post={props.post} />
+            <OnClickReReplyCreate data={data} post={props.post} />
             {data.replies.map((data) => {
               return (
                 <div
+                  key={data.id}
                   style={{
                     display: "flex",
                     background: "rgb(244, 244, 244)",
@@ -188,17 +228,18 @@ const ReplyView = (props) => {
                   />
                   <div style={{ flexGrow: "1" }}>
                     <ReplycontainerWithoutBtn
-                      key={data.id}
                       data={data}
                       setReReply={setReReply}
-                      onClickThumbsUp={props.onClickThumbsUp}
-                      onClickThumbsDown={props.onClickThumbsDown}
+                      userId={props.userId}
+                      // onClickThumbsUp={() => props.onClickThumbsUp(data)}
+                      // onClickThumbsDown={() => props.onClickThumbsDown(data)}
+                      handleRemove={() => props.handleRemove(data.id)}
                     />
                   </div>
                 </div>
               );
             })}
-          </>
+          </Fragment>
         );
       })}
     </>
@@ -236,6 +277,7 @@ const ReplyCreate = (props) => {
         placeholder="내용을 작성하세요."
         onChange={(e) => setCreateReply(e.target.value)}
         value={createReply}
+        maxLength="200"
       />
       <div className="reply-submit-wrapper">
         <Button
@@ -281,6 +323,7 @@ const ReReplyCreate = (props) => {
         placeholder="내용을 작성하세요."
         onChange={(e) => setCreateReply(e.target.value)}
         value={createReply}
+        maxLength="200"
       />
       <div className="reply-submit-wrapper">
         <Button

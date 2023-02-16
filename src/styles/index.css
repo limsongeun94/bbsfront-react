@@ -360,7 +360,31 @@ a:visited {
   margin: 10px;
 }
 
+.remove_modal_back {
+  position: absolute;
+  top: 0;
+  left: -40px;
+  background-color: rgba(33, 37, 41, 0.8);
+  width: calc(100% + 79px);
+  height: 100vh;
+}
+
+.remove_modal {
+  position: absolute;
+  top: calc(50% - 100px);
+  left: calc(50% - 180px);
+  border: 1px solid #212529;
+  width: 400px;
+  height: 200px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .reply-view-wrapper {
+  min-height: 107px;
   display: flex;
   justify-content: space-between;
   border: 1px solid #212529;
@@ -400,7 +424,6 @@ a:visited {
   display: flex;
   justify-content: space-between;
   border: 1px solid #212529;
-  margin-top: -1px;
 }
 
 .reply-write-wrapper > textarea {
@@ -419,6 +442,7 @@ a:visited {
 }
 
 .rereply-view-wrapper {
+  min-height: 107px;
   display: flex;
   justify-content: space-between;
 }
@@ -485,7 +509,7 @@ a:visited {
 }
 
 .ql-editor {
-  height: 600px;
+  height: 450px;
 }
 
 .ql-editor > p {
