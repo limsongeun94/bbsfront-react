@@ -2,14 +2,18 @@ import { Button } from "react-bootstrap";
 import parse from "html-react-parser";
 import { request } from "src/libs/request";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const PostDetailMain = (props) => {
-  const [userId, setUserId] = useState("");
+  let user_state = useSelector((state) => {
+    return state.user;
+  });
+  // const [userId, setUserId] = useState("");
 
   const onClickThumbsUp = () => {
     request
       .post("/thumbs", {
-        user_id: userId,
+        user_id: user_state.id,
         post_id: props.post.id,
         reply_id: 0,
         value: true,
@@ -22,7 +26,7 @@ const PostDetailMain = (props) => {
   const onClickThumbsDown = () => {
     request
       .post("/thumbs", {
-        user_id: userId,
+        user_id: user_state.id,
         post_id: props.post.id,
         reply_id: 0,
         value: false,
@@ -32,13 +36,13 @@ const PostDetailMain = (props) => {
       });
   };
 
-  const setUserInfo = () => {
-    request.get("/user/info").then((response) => setUserId(response.data.id));
-  };
+  // const setUserInfo = () => {
+  //   request.get("/user/info").then((response) => setUserId(response.data.id));
+  // };
 
-  useEffect(() => {
-    setUserInfo();
-  }, []);
+  // useEffect(() => {
+  //   setUserInfo();
+  // }, []);
 
   return (
     <div className="main-text-wrapper">

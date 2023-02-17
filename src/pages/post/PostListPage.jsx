@@ -3,6 +3,7 @@ import { Button } from "react-bootstrap";
 import ListTable from "src/pages/post/ListTable";
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { request } from "src/libs/request";
 import PageNum from "./PageNum";
 
@@ -62,17 +63,19 @@ const PostListPage = () => {
       });
   };
 
-  const [showWriteBtn, setShowWriteBtn] = useState(true);
+  let user_state = useSelector((state) => {
+    return state.user;
+  });
 
-  const getUserInfo = () => {
-    request
-      .get("/user/info")
-      .catch((error) =>
-        error.response.status == 403
-          ? setShowWriteBtn(false)
-          : setShowWriteBtn(true)
-      );
+  const [loginInfo, setLoginInfo] = useState(0);
+
+  const getUserId = () => {
+    setLoginInfo(user_state.id);
   };
+
+  useEffect(() => {
+    getUserId();
+  }, [user_state]);
 
   useEffect(() => {
     setPostPage();
@@ -82,10 +85,6 @@ const PostListPage = () => {
     showBoardName();
     showBoardNotice();
   }, [board_id]);
-
-  useEffect(() => {
-    getUserInfo();
-  }, []);
 
   return (
     <Page>
@@ -98,7 +97,7 @@ const PostListPage = () => {
           page={page}
           setSearchParams={setSearchParams}
         />
-        {showWriteBtn ? (
+        {loginInfo ? (
           <Button
             variant="outline-secondary"
             className="outline-secondary text-nowrap wright-button"

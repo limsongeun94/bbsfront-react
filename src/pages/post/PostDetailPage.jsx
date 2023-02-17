@@ -4,7 +4,8 @@ import PostDetailMain from "./PostDetailMain";
 import PostDetailReply from "./PostDetailReply-1";
 import ListTable from "./ListTable";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { request } from "src/libs/request";
 import { Button } from "react-bootstrap";
 import PageNum from "./../post/PageNum";
@@ -106,7 +107,6 @@ const PostDetailPage = () => {
         },
       })
       .then((response) => {
-        // window.scrollTo(0, 0);
         setShowModal(true);
       });
   };
@@ -142,20 +142,18 @@ const PostDetailPage = () => {
       });
   };
 
-  const [showWriteBtn, setShowWriteBtn] = useState(true);
-
-  const getUserInfo = () => {
-    request
-      .get("/user/info")
-      .catch((error) =>
-        error.response.status == 403
-          ? setShowWriteBtn(false)
-          : setShowWriteBtn(true)
-      );
-  };
-
   const getReply = (data) => {
     setPost({ ...post, replies: data });
+  };
+
+  let user_state = useSelector((state) => {
+    return state.user;
+  });
+
+  const [loginInfo, setLoginInfo] = useState(0);
+
+  const getUserId = () => {
+    setLoginInfo(user_state.id);
   };
 
   useEffect(() => {
@@ -169,8 +167,8 @@ const PostDetailPage = () => {
   }, [page]);
 
   useEffect(() => {
-    getUserInfo();
-  }, []);
+    getUserId();
+  }, [user_state]);
 
   return (
     <Page>
@@ -205,7 +203,7 @@ const PostDetailPage = () => {
             맨위로
           </Button>
         </div>
-        {showWriteBtn ? (
+        {loginInfo ? (
           <div className="edit-btn">
             <Button
               variant="outline-secondary"

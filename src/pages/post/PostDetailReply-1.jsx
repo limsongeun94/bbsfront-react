@@ -1,11 +1,10 @@
 import { Button } from "react-bootstrap";
 import { useEffect, useState, Fragment } from "react";
+import { useSelector } from "react-redux";
 import { request } from "src/libs/request";
 import dateFomat from "src/libs/datetime";
 
 const PostDetailReply = (props) => {
-  const [userId, setUserId] = useState("");
-
   const handleRemove = (reply_id) => {
     request
       .delete("/post/reply", {
@@ -19,7 +18,7 @@ const PostDetailReply = (props) => {
   const onClickThumbsUp = (data) => {
     request
       .post("/thumbs", {
-        user_id: 0,
+        user_id: user_state.id,
         post_id: 0,
         reply_id: data.id,
         value: true,
@@ -32,7 +31,7 @@ const PostDetailReply = (props) => {
   const onClickThumbsDown = (data) => {
     request
       .post("/thumbs", {
-        user_id: 0,
+        user_id: user_state.id,
         post_id: 0,
         reply_id: data.id,
         value: false,
@@ -42,25 +41,33 @@ const PostDetailReply = (props) => {
       });
   };
 
-  const setUserInfo = () => {
-    request.get("/user/info").then((response) => setUserId(response.data.id));
+  let user_state = useSelector((state) => {
+    return state.user;
+  });
+
+  const [loginInfo, setLoginInfo] = useState(0);
+
+  const getUserId = () => {
+    setLoginInfo(user_state.id);
   };
 
   useEffect(() => {
-    setUserInfo();
-  }, []);
+    getUserId();
+  }, [user_state]);
 
   return (
     <>
       <ReplyView
         post={props.post}
         getReply={props.getReply}
-        userId={userId}
+        loginInfo={loginInfo}
         onClickThumbsUp={onClickThumbsUp}
         onClickThumbsDown={onClickThumbsDown}
         handleRemove={handleRemove}
       />
-      <ReplyCreate post={props.post} getReply={props.getReply} />
+      {loginInfo ? (
+        <ReplyCreate post={props.post} getReply={props.getReply} />
+      ) : null}
     </>
   );
 };
@@ -132,7 +139,7 @@ const ReplyView = (props) => {
               <span>{props.data.thumbs_down_cnt}</span>
             </Button>
           </div>
-          {props.data.writer_id == props.userId ? (
+          {props.data.writer_id == props.loginInfo ? (
             <div style={{ textAlign: "center", marginTop: "10px" }}>
               <Button
                 variant="danger"
@@ -179,7 +186,7 @@ const ReplyView = (props) => {
               <span>{props.data.thumbs_down_cnt}</span>
             </Button>
           </div>
-          {props.data.writer_id == props.userId ? (
+          {props.data.writer_id == props.loginInfo ? (
             <div style={{ textAlign: "center", marginTop: "10px" }}>
               <Button
                 variant="danger"
@@ -205,12 +212,15 @@ const ReplyView = (props) => {
               setReReply={setReReply}
               setClickReply={setClickReply}
               clickReply={clickReply}
-              userId={props.userId}
+              loginInfo={props.userId}
               onClickThumbsUp={() => props.onClickThumbsUp(data)}
               onClickThumbsDown={() => props.onClickThumbsDown(data)}
               handleRemove={() => props.handleRemove(data.id)}
             />
-            <OnClickReReplyCreate data={data} post={props.post} />
+            {props.loginInfo ? (
+              <OnClickReReplyCreate data={data} post={props.post} />
+            ) : null}
+
             {data.replies.map((data) => {
               return (
                 <div
@@ -230,7 +240,7 @@ const ReplyView = (props) => {
                     <ReplycontainerWithoutBtn
                       data={data}
                       setReReply={setReReply}
-                      userId={props.userId}
+                      loginInfo={props.loginInfo}
                       // onClickThumbsUp={() => props.onClickThumbsUp(data)}
                       // onClickThumbsDown={() => props.onClickThumbsDown(data)}
                       handleRemove={() => props.handleRemove(data.id)}
