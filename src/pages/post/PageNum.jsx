@@ -41,16 +41,30 @@ const PageNum = (props) => {
     if (num.first_num == 1) {
       return;
     } else {
-      setNum({
-        first_num: num.first_num - 5,
-        last_num: num.last_num - 5,
-      });
+      if (num.last_num % 5 == 0) {
+        setNum({
+          first_num: num.first_num - 5,
+          last_num: num.last_num - 5,
+        });
+        setActive(num.first_num - 5);
+        props.setSearchParams({ page: num.first_num - 5 });
+      } else {
+        for (let x = 1; x <= 4; x++) {
+          if (num.last_num % 5 == x) {
+            setNum({
+              first_num: num.first_num - 5,
+              last_num: num.last_num - x,
+            });
+            setActive(num.first_num - 5);
+            props.setSearchParams({ page: num.first_num - 5 });
+          }
+        }
+      }
     }
   };
 
   const onClickNext = () => {
     if (num.last_num == props.lastPage) {
-      return;
     } else {
       setNum({
         first_num: num.first_num + 5,
@@ -58,34 +72,53 @@ const PageNum = (props) => {
           props.lastPage < num.last_num + 5 ? props.lastPage : num.last_num + 5,
         // props.lastPage가 num + 5 보다 작으면 props.lastPage로 되게.
       });
+      setActive(num.first_num + 5);
+      props.setSearchParams({ page: num.first_num + 5 });
     }
   };
 
   const onClickFirst = () => {
     setNum({
       first_num: 1,
-      last_num:
-        props.lastPage < num.last_num + 5 ? props.lastPage : num.last_num + 5,
+      last_num: props.lastPage < 5 ? props.lastPage : 5,
     });
     setActive(1);
+    props.setSearchParams({ page: 1 });
   };
 
   const onClickLast = () => {
-    setNum({
-      first_num: props.lastPage < num.last_num + 5 ? 1 : num.last_num - 4,
-      last_num: props.lastPage,
-    });
+    if (props.lastPage % 5 == 0) {
+      setNum({ first_num: props.lastPage - 4, last_num: props.lastPage });
+    } else {
+      for (let x = 1; x <= 4; x++) {
+        if (props.lastPage % 5 == x) {
+          setNum({
+            first_num: props.lastPage - x + 1,
+            last_num: props.lastPage,
+          });
+        }
+      }
+    }
     setActive(props.lastPage);
+    props.setSearchParams({ page: props.lastPage });
   };
 
   return (
     <>
       <Pagination>
-        <Pagination.First onClick={onClickFirst} /> {/* 맨 첫번째 */}
-        <Pagination.Prev onClick={onClickPrev} /> {/* 첫번째에서 -1 ~ -5 */}
+        {num.first_num == 1 ? null : (
+          <>
+            <Pagination.First onClick={onClickFirst} />
+            <Pagination.Prev onClick={onClickPrev} />
+          </>
+        )}
         {items}
-        <Pagination.Next onClick={onClickNext} /> {/* 마지막에서 +1 ~ +5 */}
-        <Pagination.Last onClick={onClickLast} /> {/* 맨 마지막 */}
+        {num.last_num == props.lastPage ? null : (
+          <>
+            <Pagination.Next onClick={onClickNext} />
+            <Pagination.Last onClick={onClickLast} />
+          </>
+        )}
       </Pagination>
     </>
   );

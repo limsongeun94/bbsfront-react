@@ -17,10 +17,6 @@ const Header = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const toLogin = () => {
-    navigate("/landing/login");
-  };
-
   const doLogout = () => {
     request.delete("/user/authenticate").then((res) => {
       dispatch(removeUser());
@@ -69,10 +65,22 @@ const Header = (props) => {
           <div>
             {user.id ? (
               <div className="text-nowrap">
-                <span>{user.nick}님 안녕하세요</span>
+                <span style={{ marginRight: "10px" }}>
+                  {user.nick}님 안녕하세요
+                </span>
                 <Button
                   variant="outline-secondary"
                   className="outline-secondary text-nowrap"
+                  style={{ marginRight: "10px" }}
+                  onClick={() => {
+                    navigate("/userinfo");
+                  }}
+                >
+                  마이페이지
+                </Button>
+                <Button
+                  variant="danger"
+                  className="text-nowrap"
                   onClick={doLogout}
                 >
                   로그아웃
@@ -85,7 +93,9 @@ const Header = (props) => {
               <Button
                 variant="outline-secondary"
                 className="outline-secondary text-nowrap"
-                onClick={toLogin}
+                onClick={() => {
+                  navigate("/landing/login");
+                }}
               >
                 로그인
               </Button>

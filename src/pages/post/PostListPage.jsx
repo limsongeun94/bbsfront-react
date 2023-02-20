@@ -102,7 +102,7 @@ const PostListPage = () => {
             variant="outline-secondary"
             className="outline-secondary text-nowrap wright-button"
             onClick={() => {
-              navigate("/post/writer");
+              navigate("/post/writer/new");
             }}
           >
             글쓰기

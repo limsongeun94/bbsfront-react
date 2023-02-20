@@ -15,6 +15,7 @@ import {
   createTerm,
   removeInfo,
 } from "src/store/regi_user";
+import Logo from "./Logo";
 
 const JoinPage0 = () => {
   const dispatch = useDispatch();
@@ -59,73 +60,76 @@ const JoinPage0 = () => {
 
   const navigate = useNavigate();
   return (
-    <div className="joinpage0">
-      <h2 className="margin-bottom">회원가입</h2>
-      <div className="margin-bottom left">
-        <input
-          id="user-join-all-agree"
-          type="checkbox"
-          className="join-agree-input"
-          onChange={(e) => {
-            handleAllCheck(e.target.checked);
-          }}
-          checked={checkItem.length === 2 ? true : false}
-        />
-        <label for="user-join-all-agree">전체동의</label>
-      </div>
-      <div className="margin-bottom">
-        <div className="left">
+    <div className="logo-wrapper">
+      <Logo />
+      <div className="joinpage0">
+        <h2 className="margin-bottom">회원가입</h2>
+        <div className="margin-bottom left">
           <input
-            id="user-join-service-agree"
+            id="user-join-all-agree"
             type="checkbox"
             className="join-agree-input"
             onChange={(e) => {
-              handleSingleCheck(e.target.checked, serviceTermsId); // "user-join-service-agree");
+              handleAllCheck(e.target.checked);
             }}
-            checked={
-              checkItem.includes(serviceTermsId /*"user-join-service-agree"*/)
-                ? true
-                : false
-            }
+            checked={checkItem.length === 2 ? true : false}
           />
-          <label for="user-join-service-agree"> 이용약관</label>
+          <label for="user-join-all-agree">전체동의</label>
         </div>
-        <div>
-          <div className="join-div">{serviceAgree}</div>
+        <div className="margin-bottom">
+          <div className="left">
+            <input
+              id="user-join-service-agree"
+              type="checkbox"
+              className="join-agree-input"
+              onChange={(e) => {
+                handleSingleCheck(e.target.checked, serviceTermsId); // "user-join-service-agree");
+              }}
+              checked={
+                checkItem.includes(serviceTermsId /*"user-join-service-agree"*/)
+                  ? true
+                  : false
+              }
+            />
+            <label for="user-join-service-agree"> 이용약관</label>
+          </div>
+          <div>
+            <div className="join-div">{serviceAgree}</div>
+          </div>
         </div>
-      </div>
-      <div className="margin-bottom">
-        <div className="left">
-          <input
-            id="user-join-info-agree"
-            type="checkbox"
-            className="join-agree-input"
-            onChange={(e) => {
-              handleSingleCheck(e.target.checked, infoTermsId); //"user-join-info-agree");
+        <div className="margin-bottom">
+          <div className="left">
+            <input
+              id="user-join-info-agree"
+              type="checkbox"
+              className="join-agree-input"
+              onChange={(e) => {
+                handleSingleCheck(e.target.checked, infoTermsId); //"user-join-info-agree");
+              }}
+              checked={
+                checkItem.includes(infoTermsId /*"user-join-info-agree" */)
+                  ? true
+                  : false
+              }
+            />
+            <label for="user-join-info-agree"> 개인정보처리방침</label>
+          </div>
+          <div>
+            <div className="join-div">{infoAgree}</div>
+          </div>
+        </div>
+        <div className="margin-bottom">
+          <button
+            className="join-btn"
+            onClick={() => {
+              checkItem.length === 2
+                ? navigate("/landing/join/1")
+                : alert("모두 동의하세요.");
             }}
-            checked={
-              checkItem.includes(infoTermsId /*"user-join-info-agree" */)
-                ? true
-                : false
-            }
-          />
-          <label for="user-join-info-agree"> 개인정보처리방침</label>
+          >
+            다음
+          </button>
         </div>
-        <div>
-          <div className="join-div">{infoAgree}</div>
-        </div>
-      </div>
-      <div className="margin-bottom">
-        <button
-          className="join-btn"
-          onClick={() => {
-            checkItem.length === 2
-              ? navigate("/landing/join/1")
-              : alert("모두 동의하세요.");
-          }}
-        >
-          다음
-        </button>
       </div>
     </div>
   );
@@ -140,12 +144,23 @@ const JoinPage1 = () => {
   });
 
   const [pwordCheck, setPwordCheck] = useState("");
+  const [email, setEmail] = useState("");
+  const [emailcheck, setEmailCheck] = useState(false);
   const [nickDup, setNickDup] = useState(null);
   const [nickCount, setNickCount] = useState(0);
 
-  const onChangeEmail = (e) => {
-    dispatch(createEmail(e.target.value));
+  const checkEmail = () => {
+    var regExp =
+      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    if (regExp.test(email)) {
+      setEmailCheck(true);
+      dispatch(createEmail(email));
+    } else setEmailCheck(false);
   };
+
+  useEffect(() => {
+    checkEmail();
+  }, [email]);
 
   const onChangeNickNmae = (e) => {
     const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/;
@@ -212,70 +227,85 @@ const JoinPage1 = () => {
   };
 
   return (
-    <div className="joinpage1">
-      <h2 className="margin-bottom">회원가입</h2>
-      <p className="left">* 필수입력</p>
-      <div className="margin-bottom">
-        <input
-          id="user-join-email"
-          type="email"
-          placeholder="이메일"
-          className="join-input"
-          maxLength={50}
-          value={user.email}
-          onChange={onChangeEmail}
-          autoFocus
-        />
-      </div>
-      <div>
-        <input
-          id="user-join-nickname"
-          placeholder="닉네임"
-          className="join-nickname-input"
-          maxLength={10}
-          value={user.nick}
-          onChange={onChangeNickNmae}
-        />
-        <button className="join-nickname-btn" onClick={dbCheck}>
-          중복확인
-        </button>
-      </div>
-      {nickCount == 0 ? null : nickDup === true ? (
-        <p className="nick-style" style={green}>
-          사용가능한 닉네임입니다.
-        </p>
-      ) : (
-        <p className="nick-style" style={red}>
-          이미 사용중인 닉네임입니다.
-        </p>
-      )}
-      <div className="margin-bottom margin-top">
-        <input
-          id="user-join-password"
-          type="password"
-          placeholder="비밀번호"
-          className="join-input"
-          maxLength={50}
-          value={user.password}
-          onChange={onChangePWord}
-        />
-      </div>
-      <div className="margin-bottom">
-        <input
-          id="user-join-password-check"
-          type="password"
-          placeholder="비밀번호 확인"
-          className="join-input"
-          maxLength={50}
-          value={pwordCheck}
-          onChange={onChangePWordCheck}
-          onKeyPress={handleOnKeyPress}
-        />
-      </div>
-      <div className="margin-bottom">
-        <button className="join-btn" onClick={onClickNext}>
-          다음
-        </button>
+    <div className="logo-wrapper">
+      <Logo />
+      <div className="joinpage1">
+        <h2 className="margin-bottom">회원가입</h2>
+        <p className="left">* 필수입력</p>
+        <div className="margin-bottom">
+          <input
+            id="user-join-email"
+            type="email"
+            placeholder="이메일"
+            className="join-input"
+            maxLength={50}
+            // value={user.email}
+            // onChange={onChangeEmail}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            // onBlur={checkEmail}
+            autoFocus
+          />
+          {emailcheck ? (
+            <p className="nick-style" style={green}>
+              유효한 이메일입니다.
+            </p>
+          ) : (
+            <p className="nick-style" style={red}>
+              이메일 형식을 체크하세요.
+            </p>
+          )}
+        </div>
+        <div>
+          <input
+            id="user-join-nickname"
+            placeholder="닉네임"
+            className="join-nickname-input"
+            maxLength={10}
+            value={user.nick}
+            onChange={onChangeNickNmae}
+          />
+          <button className="join-nickname-btn" onClick={dbCheck}>
+            중복확인
+          </button>
+        </div>
+        {nickCount == 0 ? null : nickDup === true ? (
+          <p className="nick-style" style={green}>
+            사용가능한 닉네임입니다.
+          </p>
+        ) : (
+          <p className="nick-style" style={red}>
+            이미 사용중인 닉네임입니다.
+          </p>
+        )}
+        <div className="margin-bottom margin-top">
+          <input
+            id="user-join-password"
+            type="password"
+            placeholder="비밀번호"
+            className="join-input"
+            maxLength={50}
+            value={user.password}
+            onChange={onChangePWord}
+          />
+        </div>
+        <div className="margin-bottom">
+          <input
+            id="user-join-password-check"
+            type="password"
+            placeholder="비밀번호 확인"
+            className="join-input"
+            maxLength={50}
+            value={pwordCheck}
+            onChange={onChangePWordCheck}
+            onKeyPress={handleOnKeyPress}
+          />
+        </div>
+        <div className="margin-bottom">
+          <button className="join-btn" onClick={onClickNext}>
+            다음
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -289,23 +319,38 @@ const JoinPage2 = () => {
     return state.regi_user;
   });
 
-  const onChangeName = (e) => {
+  const [name, setName] = useState("");
+  const [nameCheck, setNameCheck] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [phoneCheck, setPhoneCheck] = useState(false);
+
+  const checkName = () => {
     const regex = /^[ㄱ-ㅎ|가-힣]+$/;
-    if (regex.test(e.target.value)) {
-      dispatch(createName(e.target.value));
+    if (regex.test(name)) {
+      dispatch(createName(name));
+      setNameCheck(true);
     } else {
-      dispatch(createName(""));
+      setNameCheck(false);
     }
   };
 
-  const onChangePhone = (e) => {
+  useEffect(() => {
+    checkName();
+  }, [name]);
+
+  const checkPhone = () => {
     const regex = /^[0-9]+$/;
-    if (regex.test(e.target.value)) {
-      dispatch(createPhone(e.target.value));
+    if (regex.test(phone)) {
+      dispatch(createPhone(phone));
+      setPhoneCheck(true);
     } else {
-      dispatch(createPhone(""));
+      setPhoneCheck(false);
     }
   };
+
+  useEffect(() => {
+    checkPhone();
+  }, [phone]);
 
   const open = useDaumPostcodePopup();
   const handleComplete = (data) => {
@@ -359,70 +404,103 @@ const JoinPage2 = () => {
     }
   };
 
+  const red = {
+    color: "red",
+  };
+
+  const green = {
+    color: "green",
+  };
+
   return (
-    <div className="joinpage2">
-      <h2 className="margin-bottom">회원가입</h2>
-      <p className="left">* 선택입력</p>
-      <div className="margin-bottom">
-        <input
-          id="user-join-name"
-          placeholder="이름"
-          className="join-input"
-          maxLength={10}
-          value={user.name}
-          onChange={onChangeName}
-          autoFocus
-        />
-      </div>
-      <div className="margin-bottom">
-        <input
-          id="user-join-phone"
-          placeholder="전화번호"
-          className="join-input"
-          maxLength={13}
-          value={user.phone}
-          onChange={onChangePhone}
-        />
-      </div>
-      <div className="margin-bottom">
-        <input
-          id="user-join-postcode"
-          placeholder="우편번호"
-          className="join-postcode-input"
-          value={user.zipcode}
-        />
-        <button className="join-postcode-btn" onClick={handleClick}>
-          검색
-        </button>
-      </div>
-      <div className="margin-bottom">
-        <input
-          id="user-join-adress"
-          placeholder="주소"
-          className="join-div"
-          value={user.address}
-        />
-      </div>
-      <div className="margin-bottom">
-        <textarea
-          id="user-join-adress-detail"
-          placeholder="상세주소"
-          className="join-adress"
-          maxLength={50}
-          value={user.address_detail}
-          onChange={onChangeDeAdr}
-          onKeyPress={handleOnKeyPress}
-        />
-      </div>
-      <div className="margin-bottom">
-        <button
-          className="join-btn"
-          onClick={() => {
-            handleJoin();
-          }}
-        >
-          완료
-        </button>
+    <div className="logo-wrapper">
+      <Logo />
+      <div className="joinpage2">
+        <h2 className="margin-bottom">회원가입</h2>
+        <p className="left">* 선택입력</p>
+        <div className="margin-bottom">
+          <input
+            id="user-join-name"
+            placeholder="이름"
+            className="join-input"
+            maxLength={10}
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+            autoFocus
+          />
+          {nameCheck ? (
+            <p className="nick-style" style={green}>
+              사용가능한 이름입니다.
+            </p>
+          ) : (
+            <p className="nick-style" style={red}>
+              유효하지 않은 이름입니다.
+            </p>
+          )}
+        </div>
+        <div className="margin-bottom">
+          <input
+            id="user-join-phone"
+            placeholder="전화번호"
+            className="join-input"
+            maxLength={13}
+            value={phone}
+            onChange={(e) => {
+              setPhone(e.target.value);
+            }}
+          />
+          {phoneCheck ? (
+            <p className="nick-style" style={green}>
+              사용가능한 번호입니다.
+            </p>
+          ) : (
+            <p className="nick-style" style={red}>
+              유효하지 않은 번호입니다.
+            </p>
+          )}
+        </div>
+        <div className="margin-bottom">
+          <input
+            id="user-join-postcode"
+            placeholder="우편번호"
+            className="join-postcode-input"
+            value={user.zipcode}
+          />
+          <button className="join-postcode-btn" onClick={handleClick}>
+            검색
+          </button>
+        </div>
+        <div className="margin-bottom">
+          <input
+            id="user-join-adress"
+            placeholder="주소"
+            className="join-div"
+            value={user.address}
+          />
+        </div>
+        <div className="margin-bottom">
+          <textarea
+            id="user-join-adress-detail"
+            placeholder="상세주소"
+            className="join-adress"
+            maxLength={50}
+            value={user.address_detail}
+            onChange={onChangeDeAdr}
+            onKeyPress={handleOnKeyPress}
+          />
+        </div>
+        <div className="margin-bottom">
+          <button
+            className="join-btn"
+            onClick={() => {
+              handleJoin();
+            }}
+          >
+            완료
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -443,35 +521,38 @@ const JoinPage3 = () => {
   });
 
   return (
-    <div className="joinpage3">
-      <h2 className="margin-bottom">가입완료</h2>
-      <div className="left">
-        <p>{user.nick}님 가입해주셔서 감사합니다.</p>
-        <p>{user.email}로 가입인증 메일을 발송했습니다.</p>
-        <p>메일에 포함된 링크를 클릭하여 가입을 완료해주세요.</p>
-      </div>
-      <div className="margin-bottom">
-        <button
-          className="join-btn"
-          onClick={() => {
-            navigate("/landing/login");
-          }}
-        >
-          로그인하기
-        </button>
-      </div>
-      <div className="margin-bottom">
-        <button className="join-btn">인증 메일 다시 보내기</button>
-      </div>
-      <div className="margin-bottom">
-        <button
-          className="join-btn"
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          돌아가기
-        </button>
+    <div className="logo-wrapper">
+      <Logo />
+      <div className="joinpage3">
+        <h2 className="margin-bottom">가입완료</h2>
+        <div className="left">
+          <p>{user.nick}님 가입해주셔서 감사합니다.</p>
+          <p>{user.email}로 가입인증 메일을 발송했습니다.</p>
+          <p>메일에 포함된 링크를 클릭하여 가입을 완료해주세요.</p>
+        </div>
+        <div className="margin-bottom">
+          <button
+            className="join-btn"
+            onClick={() => {
+              navigate("/landing/login");
+            }}
+          >
+            로그인하기
+          </button>
+        </div>
+        <div className="margin-bottom">
+          <button className="join-btn">인증 메일 다시 보내기</button>
+        </div>
+        <div className="margin-bottom">
+          <button
+            className="join-btn"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            돌아가기
+          </button>
+        </div>
       </div>
     </div>
   );

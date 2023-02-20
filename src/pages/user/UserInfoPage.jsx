@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { request } from "src/libs/request";
 import Header from "../main/Header";
 import Footer from "../main/Footer";
+import PageNum from "../post/PageNum";
 import { Button } from "react-bootstrap";
 import dateFomat from "src/libs/datetime";
 
@@ -127,6 +128,7 @@ const UserInfoPage = () => {
           </tbody>
         </table>
       </div>
+      <PageNum />
       <Footer />
     </div>
   );

@@ -18,7 +18,8 @@ import MainLayout from "src/pages/main/Layout";
 import IndexPage from "src/pages/main/IndexPage";
 import PostListPage from "src/pages/post/PostListPage";
 import PostDetailPage from "src/pages/post/PostDetailPage";
-import PostWritePage from "src/pages/post/PostWritePage";
+import PostWritePageNew from "src/pages/post/PostWritePage_new";
+import PostWritePageEdit from "src/pages/post/PostWritePage_edit";
 import UserInfoPage from "src/pages/user/UserInfoPage";
 import NoticeListPage from "src/pages/notice/NoticeListPage";
 import NoticeDetailPage from "src/pages/notice/NoticeDetailPage";
@@ -88,7 +89,16 @@ const router = createBrowserRouter([
   },
   {
     path: "post/writer",
-    element: <PostWritePage />,
+    children: [
+      {
+        path: "new",
+        element: <PostWritePageNew />,
+      },
+      {
+        path: "update/:board_id/:post_id",
+        element: <PostWritePageEdit />,
+      },
+    ],
   },
   {
     path: "notice",

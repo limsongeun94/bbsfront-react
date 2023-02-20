@@ -8,41 +8,38 @@ const PostDetailMain = (props) => {
   let user_state = useSelector((state) => {
     return state.user;
   });
-  // const [userId, setUserId] = useState("");
+
+  console.log(user_state.id);
 
   const onClickThumbsUp = () => {
-    request
-      .post("/thumbs", {
-        user_id: user_state.id,
-        post_id: props.post.id,
-        reply_id: 0,
-        value: true,
-      })
-      .then((response) => {
-        props.showDetailPage();
-      });
+    if (user_state.id) {
+      request
+        .post("/thumbs", {
+          user_id: user_state.id,
+          post_id: props.post.id,
+          reply_id: 0,
+          value: true,
+        })
+        .then((response) => {
+          props.showDetailPage();
+        });
+    } else alert("로그인 후 참여하세요.");
   };
 
   const onClickThumbsDown = () => {
-    request
-      .post("/thumbs", {
-        user_id: user_state.id,
-        post_id: props.post.id,
-        reply_id: 0,
-        value: false,
-      })
-      .then((response) => {
-        props.showDetailPage();
-      });
+    if (user_state.id) {
+      request
+        .post("/thumbs", {
+          user_id: user_state.id,
+          post_id: props.post.id,
+          reply_id: 0,
+          value: false,
+        })
+        .then((response) => {
+          props.showDetailPage();
+        });
+    } else alert("로그인 후 참여하세요.");
   };
-
-  // const setUserInfo = () => {
-  //   request.get("/user/info").then((response) => setUserId(response.data.id));
-  // };
-
-  // useEffect(() => {
-  //   setUserInfo();
-  // }, []);
 
   return (
     <div className="main-text-wrapper">

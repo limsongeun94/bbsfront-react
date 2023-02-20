@@ -51,7 +51,7 @@ const PostDetailPage = () => {
       });
   };
 
-  const showReply = () => {
+  const resetReply = () => {
     request
       .get("/post/reply", {
         params: {
@@ -59,12 +59,14 @@ const PostDetailPage = () => {
         },
       })
       .then((response) => {
-        // setPost({ ...post, replies: response.data });
+        setPost({ ...post, replies: response.data });
         // console.log("클릭후", response.data);
       });
   };
 
-  const editPost = () => {};
+  const editPost = () => {
+    navigate("/post/writer/update/" + board_id + "/" + post_id);
+  };
 
   const [postList, setPostList] = useState([]);
   const [noticeList, setNoticeList] = useState([]);
@@ -181,7 +183,7 @@ const PostDetailPage = () => {
         <PostDetailReply
           post={post}
           getReply={getReply}
-          showReply={showReply}
+          resetReply={resetReply}
         />
       </div>
       <div className="post-detail-btn-wrapper">
@@ -223,7 +225,7 @@ const PostDetailPage = () => {
               variant="outline-secondary"
               className="outline-secondary text-nowrap"
               onClick={() => {
-                navigate("/post/writer");
+                navigate("/post/writer/new");
               }}
             >
               글쓰기

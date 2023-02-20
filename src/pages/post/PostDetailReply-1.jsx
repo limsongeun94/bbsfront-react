@@ -5,6 +5,12 @@ import { request } from "src/libs/request";
 import dateFomat from "src/libs/datetime";
 
 const PostDetailReply = (props) => {
+  let user_state = useSelector((state) => {
+    return state.user;
+  });
+
+  const [loginInfo, setLoginInfo] = useState(0);
+
   const handleRemove = (reply_id) => {
     request
       .delete("/post/reply", {
@@ -12,40 +18,41 @@ const PostDetailReply = (props) => {
           id: reply_id,
         },
       })
-      .then((response) => console.log("안녕"));
+      .then((response) => {
+        console.log("안녕");
+        props.resetReply();
+      });
   };
 
   const onClickThumbsUp = (data) => {
-    request
-      .post("/thumbs", {
-        user_id: user_state.id,
-        post_id: 0,
-        reply_id: data.id,
-        value: true,
-      })
-      .then((response) => {
-        props.showReply();
-      });
+    if (user_state.id) {
+      request
+        .post("/thumbs", {
+          user_id: user_state.id,
+          post_id: 0,
+          reply_id: data.id,
+          value: true,
+        })
+        .then((response) => {
+          props.resetReply();
+        });
+    } else alert("로그인 후 참여하세요.");
   };
 
   const onClickThumbsDown = (data) => {
-    request
-      .post("/thumbs", {
-        user_id: user_state.id,
-        post_id: 0,
-        reply_id: data.id,
-        value: false,
-      })
-      .then((response) => {
-        props.showReply();
-      });
+    if (user_state.id) {
+      request
+        .post("/thumbs", {
+          user_id: user_state.id,
+          post_id: 0,
+          reply_id: data.id,
+          value: false,
+        })
+        .then((response) => {
+          props.resetReply();
+        });
+    } else alert("로그인 후 참여하세요.");
   };
-
-  let user_state = useSelector((state) => {
-    return state.user;
-  });
-
-  const [loginInfo, setLoginInfo] = useState(0);
 
   const getUserId = () => {
     setLoginInfo(user_state.id);
@@ -241,8 +248,8 @@ const ReplyView = (props) => {
                       data={data}
                       setReReply={setReReply}
                       loginInfo={props.loginInfo}
-                      // onClickThumbsUp={() => props.onClickThumbsUp(data)}
-                      // onClickThumbsDown={() => props.onClickThumbsDown(data)}
+                      onClickThumbsUp={() => props.onClickThumbsUp(data)}
+                      onClickThumbsDown={() => props.onClickThumbsDown(data)}
                       handleRemove={() => props.handleRemove(data.id)}
                     />
                   </div>
