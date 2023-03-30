@@ -1,18 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { request } from "src/libs/request";
 import Header from "../main/Header";
 import Footer from "../main/Footer";
 import PageNum from "../post/PageNum";
 import { Button } from "react-bootstrap";
 import dateFomat from "src/libs/datetime";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const UserInfoPage = () => {
+  const navigate = useNavigate();
+  const fileInput = useRef();
+  const { user_id } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = searchParams.get("page");
+
   const [userInfo, setUserInfo] = useState({
     id: "",
     name: "",
     nick: "",
     intro: "",
-    thumbnail: "images.jpg",
+    thumbnail: "",
   });
 
   const showUserInfo = () => {
@@ -28,18 +36,77 @@ const UserInfoPage = () => {
   };
 
   const [postList, setPostList] = useState([]);
+  const [lastPage, setLastPage] = useState(0);
 
   const showPostList = () => {
+    if (userInfo.id) {
+      request
+        .get("post/list/page", {
+          params: {
+            writer_id: userInfo.id,
+            page: page,
+          },
+        })
+        .then((response) => {
+          setPostList(response.data.contents);
+          setLastPage(response.data.pages);
+        });
+    }
+  };
+
+  const [introUpdate, setIntroUpdate] = useState(1);
+
+  const updateUserInfo = () => {
     request
-      .get("post/list/page", {
-        params: {
-          writer_id: userInfo.id,
-          page: 1,
+      .put("/user/info", {
+        id: userInfo.id,
+        introduction: userInfo.intro,
+      })
+      .then((response) => {
+        setIntroUpdate(1);
+        showUserInfo();
+      });
+
+    request
+      .patch("/user/nick", {
+        id: userInfo.id,
+        nick: userInfo.nick,
+      })
+      .then((response) => {
+        setIntroUpdate(1);
+        showUserInfo();
+      });
+  };
+
+  const thumbnailUpload = () => {
+    fileInput.current.click();
+  };
+
+  const uploadFile = (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+
+    request
+      .patch("/user/thumbnail", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
       })
       .then((response) => {
-        setPostList(response.data.contents);
+        console.log(response.data);
+        setUserInfo({ ...userInfo, thumbnail: response.data.thumbnail });
       });
+  };
+
+  let user_state = useSelector((state) => {
+    return state.user;
+  });
+
+  const [loginInfo, setLoginInfo] = useState(0);
+
+  const getUserId = () => {
+    setLoginInfo(user_state.id);
   };
 
   useEffect(() => {
@@ -48,7 +115,11 @@ const UserInfoPage = () => {
 
   useEffect(() => {
     showPostList();
-  }, [userInfo.id]);
+  }, [userInfo.id, page]);
+
+  useEffect(() => {
+    getUserId();
+  }, [user_state]);
 
   return (
     <div className="userinfo-page">
@@ -59,13 +130,23 @@ const UserInfoPage = () => {
             <img src={userInfo.thumbnail} width="200px" height="200px" />
           </div>
           <div style={{ textAlign: "center" }}>
-            <Button
-              variant="outline-secondary"
-              className="outline-secondary text-nowrap"
-              style={{ marginTop: "10px" }}
-            >
-              변경하기
-            </Button>
+            <input
+              type="file"
+              ref={fileInput}
+              onChange={uploadFile}
+              accept="image/*"
+              style={{ display: "none" }}
+            />
+            {loginInfo ? (
+              <Button
+                variant="outline-secondary"
+                className="outline-secondary text-nowrap"
+                style={{ marginTop: "10px" }}
+                onClick={thumbnailUpload}
+              >
+                변경하기
+              </Button>
+            ) : null}
           </div>
         </div>
         <div>
@@ -75,26 +156,59 @@ const UserInfoPage = () => {
               <col style={{ widht: "65%" }} />
             </colgroup>
             <tr>
-              <td>이름</td>
+              <td style={{ width: "100px" }}>이름</td>
               <td>{userInfo.name}</td>
             </tr>
             <tr>
-              <td>닉네임</td>
-              <td>{userInfo.nick}</td>
+              <td style={{ width: "100px" }}>닉네임</td>
+              {introUpdate ? (
+                <td>{userInfo.nick}</td>
+              ) : (
+                <td>
+                  <input
+                    onChange={(e) => {
+                      setUserInfo({ ...userInfo, nick: e.target.value });
+                    }}
+                    value={userInfo.nick}
+                  />
+                </td>
+              )}
             </tr>
             <tr>
-              <td>자기소개</td>
-              <td>{userInfo.intro}</td>
+              <td style={{ width: "100px" }}>자기소개</td>
+              {loginInfo && introUpdate ? (
+                <td>{userInfo.intro}</td>
+              ) : (
+                <td>
+                  <input
+                    onChange={(e) => {
+                      setUserInfo({ ...userInfo, intro: e.target.value });
+                    }}
+                    value={userInfo.intro}
+                  />
+                </td>
+              )}
             </tr>
           </table>
         </div>
         <div>
-          <Button
-            variant="outline-secondary"
-            className="outline-secondary text-nowrap"
-          >
-            수정
-          </Button>
+          {introUpdate ? (
+            <Button
+              variant="outline-secondary"
+              className="outline-secondary text-nowrap"
+              onClick={() => setIntroUpdate(0)}
+            >
+              수정
+            </Button>
+          ) : (
+            <Button
+              variant="outline-secondary"
+              className="outline-secondary text-nowrap"
+              onClick={updateUserInfo}
+            >
+              제출
+            </Button>
+          )}
         </div>
       </div>
       <div className="list-page" style={{ marginTop: "10px" }}>
@@ -112,7 +226,13 @@ const UserInfoPage = () => {
           <tbody>
             {postList.map((data) => {
               return (
-                <tr key={data.id} className="list-main">
+                <tr
+                  key={data.id}
+                  className="list-main"
+                  onClick={() =>
+                    navigate("/post/detail/" + data.board_id + "/" + data.id)
+                  }
+                >
                   <td>{data.id}</td>
                   <td>{data.title}</td>
                   <td>
@@ -128,7 +248,12 @@ const UserInfoPage = () => {
           </tbody>
         </table>
       </div>
-      <PageNum />
+      <PageNum
+        className="wright-page"
+        lastPage={lastPage}
+        page={page}
+        setSearchParams={setSearchParams}
+      />
       <Footer />
     </div>
   );

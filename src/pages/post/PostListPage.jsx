@@ -11,9 +11,7 @@ const PostListPage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = searchParams.get("page");
-
   const { board_id } = useParams();
-
   const [boardName, setBoardName] = useState("");
   const [postList, setPostList] = useState([]);
   const [noticeList, setNoticeList] = useState([]);

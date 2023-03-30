@@ -16,7 +16,7 @@ const Editor = (props) => {
     input.addEventListener("change", () => {
       const file = input.files[0];
       const form = new FormData();
-      form.append("upload", file);
+      form.append("image", file);
 
       request
         .post("/media/upload", form, {
@@ -36,7 +36,7 @@ const Editor = (props) => {
           // 2. 현재 에디터 커서 위치값을 가져온다
           const range = editor.getSelection();
           // 가져온 위치에 이미지를 삽입한다
-          editor.insertEmbed(range.index, "image", res.data.url);
+          editor.insertEmbed(range.index, "img", res.data.url);
         });
     });
   };

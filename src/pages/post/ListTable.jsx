@@ -1,6 +1,11 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  useLocation,
+  useSearchParams,
+} from "react-router-dom";
 import { request } from "src/libs/request";
 import dateFomat from "src/libs/datetime";
 
@@ -8,27 +13,15 @@ const ListTable = (props) => {
   const navigate = useNavigate();
   const { board_id, post_id } = useParams();
   const { pathname } = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = searchParams.get("page");
 
   const onClickPostDetail = (id) => {
-    request
-      .get("post", {
-        params: {
-          id: id,
-        },
-      })
-      .then((response) => {
-        navigate("/post/detail/" + board_id + "/" + id);
-      });
+    navigate("/post/detail/" + board_id + "/" + id + "?page=" + page);
   };
 
   const onClickNoticeDetail = (data_id) => {
-    request
-      .get("notice", {
-        params: {
-          id: data_id,
-        },
-      })
-      .then((response) => navigate("/notice/detail/" + data_id));
+    navigate("/notice/detail/" + data_id);
   };
 
   useEffect(() => {
@@ -75,13 +68,16 @@ const ListTable = (props) => {
           })}
           {props.postList.map((data) => {
             return (
-              <tr
-                className="list-main"
-                key={data.id}
-                onClick={() => onClickPostDetail(data.id)}
-              >
+              <tr className="list-main" key={data.id}>
                 <td>{data.id}</td>
-                <td>{data.title}</td>
+                <td>
+                  <span
+                    onClick={() => onClickPostDetail(data.id)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {data.title}
+                  </span>
+                </td>
                 <td>{data.writer_nick}</td>
                 <td>
                   <span>

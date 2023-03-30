@@ -12,7 +12,11 @@ import {
   JoinPage2,
   JoinPage3,
 } from "src/pages/sign/JoinPage";
-import FindPWordPage from "src/pages/sign/FindPassword";
+import FindPassWord from "src/pages/sign/FindPWordPage";
+import {
+  ResetPWordPage,
+  CompletePWordPage,
+} from "src/pages/sign/ResetPWordPage";
 import EmailAuthPage from "src/pages/sign/EmailAuthPage";
 import MainLayout from "src/pages/main/Layout";
 import IndexPage from "src/pages/main/IndexPage";
@@ -69,7 +73,15 @@ const router = createBrowserRouter([
       },
       {
         path: "findpword",
-        element: <FindPWordPage />,
+        element: <FindPassWord />,
+      },
+      {
+        path: "resetpword",
+        element: <ResetPWordPage />,
+      },
+      {
+        path: "resetpword/complete",
+        element: <CompletePWordPage />,
       },
     ],
   },
@@ -115,7 +127,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "userinfo",
+    path: "userinfo/:user_id",
     element: <UserInfoPage />,
   },
 ]);

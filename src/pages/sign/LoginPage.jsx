@@ -17,15 +17,19 @@ const LoginPage = (props) => {
     const email = document.getElementById("user-login-email").value;
     const password = document.getElementById("user-login-password").value;
 
-    request
-      .post("/user/authenticate", {
-        email: email,
-        password: password,
-      })
-      .then((res) => {
-        dispatch(setUser(res.data.user));
-      })
-      .catch((error) => alert("오류가 발생했습니다."));
+    if (email && password) {
+      request
+        .post("/user/authenticate", {
+          email: email,
+          password: password,
+        })
+        .then((res) => {
+          dispatch(setUser(res.data.user));
+        })
+        .catch((error) => {
+          alert("일치하는 이메일과 비밀번호가 없습니다.");
+        });
+    } else alert("이메일과 비밀번호를 입력해주세요");
   };
 
   const handleOnKeyPress = (e) => {

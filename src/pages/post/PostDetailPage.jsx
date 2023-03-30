@@ -60,7 +60,6 @@ const PostDetailPage = () => {
       })
       .then((response) => {
         setPost({ ...post, replies: response.data });
-        // console.log("클릭후", response.data);
       });
   };
 

@@ -23,6 +23,29 @@ const Header = (props) => {
     });
   };
 
+  const doSearch = () => {
+    request
+      .get("/post/search/list/page", {
+        params: {
+          query: "string",
+          board_id: "string",
+          criteria: "string", //T 디폴트라는데 T 입력이 안 됨ㅋㅋ
+          page: 1,
+          size: 10,
+          order: "string",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+      });
+  };
+
+  const handleOnKeyPress = (e) => {
+    if (e.key === "Enter") {
+      doSearch();
+    }
+  };
+
   return (
     <header>
       <Navbar bg="dark" variant="dark">
@@ -40,28 +63,34 @@ const Header = (props) => {
             />
             게시판
           </Navbar.Brand>
-          <InputGroup className="mb-3" style={{ zIndex: "0" }}>
-            <DropdownButton
-              variant="outline-secondary"
-              title="검색내용"
-              id="input-group-dropdown-1"
-              className="outline-secondary header-dropdown"
-            >
-              <Dropdown.Item href="#">전체</Dropdown.Item>
-              <Dropdown.Item href="#">제목</Dropdown.Item>
-              <Dropdown.Item href="#">본문</Dropdown.Item>
-              <Dropdown.Item href="#">작성자</Dropdown.Item>
-              <Dropdown.Item href="#">제목+본문</Dropdown.Item>
-            </DropdownButton>
-            <Form.Control aria-label="Text input with dropdown button" />
+
+          <div className="search_bar">
+            <select className="head-select" name="search">
+              <option value="">검색내용</option>
+              <option value="title">제목</option>
+              <option value="text">본문</option>
+              <option value="write">작성자</option>
+              <option value="title_text">제목 + 본문</option>
+              <option value="all">전체</option>
+            </select>
+
+            <Form.Control
+              placeholder="검색"
+              style={{ width: "300px", margin: "0px 10px" }}
+              minLength={2}
+              maxLength={10}
+              onKeyPress={handleOnKeyPress}
+            />
+
             <Button
               variant="outline-secondary"
-              id="button-addon2"
-              className="outline-secondary"
+              className="outline-secondary text-nowrap"
+              onClick={doSearch}
             >
               검색
             </Button>
-          </InputGroup>
+          </div>
+
           <div>
             {user.id ? (
               <div className="text-nowrap">
@@ -73,7 +102,7 @@ const Header = (props) => {
                   className="outline-secondary text-nowrap"
                   style={{ marginRight: "10px" }}
                   onClick={() => {
-                    navigate("/userinfo");
+                    navigate("/userinfo?page=1");
                   }}
                 >
                   마이페이지

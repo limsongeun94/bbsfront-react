@@ -19,7 +19,6 @@ const PostDetailReply = (props) => {
         },
       })
       .then((response) => {
-        console.log("안녕");
         props.resetReply();
       });
   };
@@ -80,8 +79,6 @@ const PostDetailReply = (props) => {
 };
 
 const ReplyView = (props) => {
-  console.log("처음", props.post.replies);
-
   const [reReply, setReReply] = useState(0);
   const [clickReply, setClickReply] = useState(false);
 
@@ -219,7 +216,8 @@ const ReplyView = (props) => {
               setReReply={setReReply}
               setClickReply={setClickReply}
               clickReply={clickReply}
-              loginInfo={props.userId}
+              // loginInfo={props.userId}
+              loginInfo={props.loginInfo}
               onClickThumbsUp={() => props.onClickThumbsUp(data)}
               onClickThumbsDown={() => props.onClickThumbsDown(data)}
               handleRemove={() => props.handleRemove(data.id)}
@@ -284,6 +282,7 @@ const ReplyCreate = (props) => {
           })
           .then((response) => {
             props.getReply(response.data);
+            setCreateReply("");
           })
       );
   };

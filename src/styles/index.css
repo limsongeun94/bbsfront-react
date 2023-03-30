@@ -57,6 +57,18 @@ main.main-layout {
   grid-column: 1 / 2;
 }
 
+.search_bar {
+  display: flex;
+}
+
+.head-select {
+  width: 140px;
+  padding: 6px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+}
+
 .main_thumbnail {
   margin: 0 auto;
   /* padding: 10px 0 10px 20px; */
