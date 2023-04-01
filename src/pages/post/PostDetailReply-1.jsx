@@ -11,6 +11,17 @@ const PostDetailReply = (props) => {
 
   const [loginInfo, setLoginInfo] = useState(0);
 
+  const handleUpdate = (data) => {
+    request
+      .put("/post/reply", {
+        id: data.id,
+        body: data.body,
+      })
+      .then((response) => {
+        console.log(response);
+      });
+  };
+
   const handleRemove = (reply_id) => {
     request
       .delete("/post/reply", {
@@ -70,6 +81,7 @@ const PostDetailReply = (props) => {
         onClickThumbsUp={onClickThumbsUp}
         onClickThumbsDown={onClickThumbsDown}
         handleRemove={handleRemove}
+        handleUpdate={handleUpdate}
       />
       {loginInfo ? (
         <ReplyCreate post={props.post} getReply={props.getReply} />
@@ -125,6 +137,7 @@ const ReplyView = (props) => {
             <Button
               variant="outline-secondary"
               className="outline-secondary text-nowrap margin-right"
+              style={{ width: "58px" }}
               onClick={props.onClickThumbsUp}
             >
               <span>
@@ -135,6 +148,7 @@ const ReplyView = (props) => {
             <Button
               variant="outline-secondary"
               className="outline-secondary text-nowrap"
+              style={{ width: "58px" }}
               onClick={props.onClickThumbsDown}
             >
               <span>
@@ -144,7 +158,19 @@ const ReplyView = (props) => {
             </Button>
           </div>
           {props.data.writer_id == props.loginInfo ? (
-            <div style={{ textAlign: "center", marginTop: "10px" }}>
+            <div
+              style={{
+                textAlign: "center",
+                marginTop: "10px",
+              }}
+            >
+              <Button
+                variant="warning"
+                className=" text-nowrap margin-right"
+                onClick={props.handleUpdate}
+              >
+                수정
+              </Button>
               <Button
                 variant="danger"
                 className=" text-nowrap"
@@ -159,7 +185,7 @@ const ReplyView = (props) => {
     );
   };
 
-  const ReplycontainerWithoutBtn = (props) => {
+  const ReReplycontainer = (props) => {
     return (
       <div className="rereply-view-wrapper">
         <div className="reply-head">
@@ -221,6 +247,7 @@ const ReplyView = (props) => {
               onClickThumbsUp={() => props.onClickThumbsUp(data)}
               onClickThumbsDown={() => props.onClickThumbsDown(data)}
               handleRemove={() => props.handleRemove(data.id)}
+              handleUpdate={() => props.handleUpdate(data)}
             />
             {props.loginInfo ? (
               <OnClickReReplyCreate data={data} post={props.post} />
@@ -242,7 +269,7 @@ const ReplyView = (props) => {
                     style={{ transform: "rotate(0.5turn)" }}
                   />
                   <div style={{ flexGrow: "1" }}>
-                    <ReplycontainerWithoutBtn
+                    <ReReplycontainer
                       data={data}
                       setReReply={setReReply}
                       loginInfo={props.loginInfo}
