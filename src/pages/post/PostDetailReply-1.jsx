@@ -11,17 +11,6 @@ const PostDetailReply = (props) => {
 
   const [loginInfo, setLoginInfo] = useState(0);
 
-  const handleUpdate = (data) => {
-    request
-      .put("/post/reply", {
-        id: data.id,
-        body: data.body,
-      })
-      .then((response) => {
-        console.log(response);
-      });
-  };
-
   const handleRemove = (reply_id) => {
     request
       .delete("/post/reply", {
@@ -81,7 +70,6 @@ const PostDetailReply = (props) => {
         onClickThumbsUp={onClickThumbsUp}
         onClickThumbsDown={onClickThumbsDown}
         handleRemove={handleRemove}
-        handleUpdate={handleUpdate}
       />
       {loginInfo ? (
         <ReplyCreate post={props.post} getReply={props.getReply} />
@@ -93,6 +81,9 @@ const PostDetailReply = (props) => {
 const ReplyView = (props) => {
   const [reReply, setReReply] = useState(0);
   const [clickReply, setClickReply] = useState(false);
+
+  const [reUpdateState, setReUpdateState] = useState(false);
+  const [rereUpdateState, setReReUpdateState] = useState(false);
 
   const OnClickReReplyCreate = (_props) => {
     if (reReply == _props.data.id && clickReply == true) {
@@ -167,7 +158,7 @@ const ReplyView = (props) => {
               <Button
                 variant="warning"
                 className=" text-nowrap margin-right"
-                onClick={props.handleUpdate}
+                onClick={() => setReUpdateState(true)}
               >
                 수정
               </Button>
@@ -198,6 +189,7 @@ const ReplyView = (props) => {
             <Button
               variant="outline-secondary"
               className="outline-secondary text-nowrap margin-right"
+              style={{ width: "58px" }}
               onClick={props.onClickThumbsUp}
             >
               <span>
@@ -208,6 +200,7 @@ const ReplyView = (props) => {
             <Button
               variant="outline-secondary"
               className="outline-secondary text-nowrap"
+              style={{ width: "58px" }}
               onClick={props.onClickThumbsDown}
             >
               <span>
@@ -218,6 +211,13 @@ const ReplyView = (props) => {
           </div>
           {props.data.writer_id == props.loginInfo ? (
             <div style={{ textAlign: "center", marginTop: "10px" }}>
+              <Button
+                variant="warning"
+                className=" text-nowrap margin-right"
+                onClick={() => setReReUpdateState(true)}
+              >
+                수정
+              </Button>
               <Button
                 variant="danger"
                 className=" text-nowrap"
@@ -237,7 +237,29 @@ const ReplyView = (props) => {
       {props.post.replies.map((data) => {
         return (
           <Fragment key={data.id}>
-            <Replycontainer
+            {reUpdateState ? (
+              <ReplyUpdate
+                data={data}
+                setReUpdateState={setReUpdateState}
+                post={props.post}
+                getReply={props.getReply}
+              />
+            ) : (
+              <Replycontainer
+                data={data}
+                setReReply={setReReply}
+                setClickReply={setClickReply}
+                clickReply={clickReply}
+                // loginInfo={props.userId}
+                loginInfo={props.loginInfo}
+                onClickThumbsUp={() => props.onClickThumbsUp(data)}
+                onClickThumbsDown={() => props.onClickThumbsDown(data)}
+                handleRemove={() => props.handleRemove(data.id)}
+                handleUpdate={() => props.handleUpdate(data)}
+                setReUpdateState={setReUpdateState}
+              />
+            )}
+            {/* <Replycontainer
               data={data}
               setReReply={setReReply}
               setClickReply={setClickReply}
@@ -248,7 +270,7 @@ const ReplyView = (props) => {
               onClickThumbsDown={() => props.onClickThumbsDown(data)}
               handleRemove={() => props.handleRemove(data.id)}
               handleUpdate={() => props.handleUpdate(data)}
-            />
+            /> */}
             {props.loginInfo ? (
               <OnClickReReplyCreate data={data} post={props.post} />
             ) : null}
@@ -269,14 +291,32 @@ const ReplyView = (props) => {
                     style={{ transform: "rotate(0.5turn)" }}
                   />
                   <div style={{ flexGrow: "1" }}>
-                    <ReReplycontainer
+                    {rereUpdateState ? (
+                      <ReReplyUpdate
+                        data={data}
+                        setReReUpdateState={setReReUpdateState}
+                        post={props.post}
+                        getReply={props.getReply}
+                      />
+                    ) : (
+                      <ReReplycontainer
+                        data={data}
+                        setReReply={setReReply}
+                        loginInfo={props.loginInfo}
+                        onClickThumbsUp={() => props.onClickThumbsUp(data)}
+                        onClickThumbsDown={() => props.onClickThumbsDown(data)}
+                        handleRemove={() => props.handleRemove(data.id)}
+                        setReReUpdateState={setReReUpdateState}
+                      />
+                    )}
+                    {/* <ReReplycontainer
                       data={data}
                       setReReply={setReReply}
                       loginInfo={props.loginInfo}
                       onClickThumbsUp={() => props.onClickThumbsUp(data)}
                       onClickThumbsDown={() => props.onClickThumbsDown(data)}
                       handleRemove={() => props.handleRemove(data.id)}
-                    />
+                    /> */}
                   </div>
                 </div>
               );
@@ -373,6 +413,94 @@ const ReReplyCreate = (props) => {
           variant="outline-secondary"
           className="outline-secondary text-nowrap"
           onClick={handleCreateReReply}
+        >
+          등록
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+const ReplyUpdate = (props) => {
+  const [updateReply, setUpdateReply] = useState(props.data.body);
+
+  const handleUpdate = () => {
+    request
+      .put("/post/reply", {
+        id: props.data.id,
+        body: updateReply,
+      })
+      .then((response) =>
+        request
+          .get("post/reply", {
+            params: {
+              post_id: props.post.id,
+            },
+          })
+          .then((response) => {
+            props.getReply(response.data);
+            props.setReUpdateState(false);
+          })
+      );
+  };
+
+  return (
+    <div className="reply-write-wrapper">
+      <textarea
+        placeholder="내용을 작성하세요."
+        onChange={(e) => setUpdateReply(e.target.value)}
+        value={updateReply}
+        maxLength="200"
+      />
+      <div className="reply-submit-wrapper">
+        <Button
+          variant="outline-secondary"
+          className="outline-secondary text-nowrap"
+          onClick={() => handleUpdate()}
+        >
+          등록
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+const ReReplyUpdate = (props) => {
+  const [updateReply, setUpdateReply] = useState(props.data.body);
+
+  const handleUpdate = () => {
+    request
+      .put("/post/reply", {
+        id: props.data.id,
+        body: updateReply,
+      })
+      .then((response) =>
+        request
+          .get("post/reply", {
+            params: {
+              post_id: props.post.id,
+            },
+          })
+          .then((response) => {
+            props.getReply(response.data);
+            props.setReReUpdateState(false);
+          })
+      );
+  };
+
+  return (
+    <div className="reply-write-wrapper">
+      <textarea
+        placeholder="내용을 작성하세요."
+        onChange={(e) => setUpdateReply(e.target.value)}
+        value={updateReply}
+        maxLength="200"
+      />
+      <div className="reply-submit-wrapper">
+        <Button
+          variant="outline-secondary"
+          className="outline-secondary text-nowrap"
+          onClick={() => handleUpdate()}
         >
           등록
         </Button>
