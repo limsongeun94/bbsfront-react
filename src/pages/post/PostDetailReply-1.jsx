@@ -82,8 +82,10 @@ const ReplyView = (props) => {
   const [reReply, setReReply] = useState(0);
   const [clickReply, setClickReply] = useState(false);
 
-  const [reUpdateState, setReUpdateState] = useState(false);
-  const [rereUpdateState, setReReUpdateState] = useState(false);
+  const [reUpdateState, setReUpdateState] = useState(0);
+  const [rereUpdateState, setReReUpdateState] = useState(0);
+
+  console.log("reUpdateState1", reUpdateState);
 
   const OnClickReReplyCreate = (_props) => {
     if (reReply == _props.data.id && clickReply == true) {
@@ -158,7 +160,7 @@ const ReplyView = (props) => {
               <Button
                 variant="warning"
                 className=" text-nowrap margin-right"
-                onClick={() => setReUpdateState(true)}
+                onClick={() => setReUpdateState(props.data.id)}
               >
                 수정
               </Button>
@@ -214,7 +216,7 @@ const ReplyView = (props) => {
               <Button
                 variant="warning"
                 className=" text-nowrap margin-right"
-                onClick={() => setReReUpdateState(true)}
+                onClick={() => setReReUpdateState(props.data.id)}
               >
                 수정
               </Button>
@@ -237,7 +239,7 @@ const ReplyView = (props) => {
       {props.post.replies.map((data) => {
         return (
           <Fragment key={data.id}>
-            {reUpdateState ? (
+            {reUpdateState == data.id ? (
               <ReplyUpdate
                 data={data}
                 setReUpdateState={setReUpdateState}
@@ -255,7 +257,6 @@ const ReplyView = (props) => {
                 onClickThumbsUp={() => props.onClickThumbsUp(data)}
                 onClickThumbsDown={() => props.onClickThumbsDown(data)}
                 handleRemove={() => props.handleRemove(data.id)}
-                handleUpdate={() => props.handleUpdate(data)}
                 setReUpdateState={setReUpdateState}
               />
             )}
@@ -291,7 +292,7 @@ const ReplyView = (props) => {
                     style={{ transform: "rotate(0.5turn)" }}
                   />
                   <div style={{ flexGrow: "1" }}>
-                    {rereUpdateState ? (
+                    {rereUpdateState == data.id ? (
                       <ReReplyUpdate
                         data={data}
                         setReReUpdateState={setReReUpdateState}
@@ -439,7 +440,7 @@ const ReplyUpdate = (props) => {
           })
           .then((response) => {
             props.getReply(response.data);
-            props.setReUpdateState(false);
+            props.setReUpdateState(0);
           })
       );
   };

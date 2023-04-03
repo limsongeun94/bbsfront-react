@@ -28,6 +28,27 @@ const ListTable = (props) => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
+  const [replyArr, setReplyArr] = useState([]);
+  const [replyNum, setReplyNum] = useState(0);
+
+  const countReply = () => {
+    request
+      .get("/post/reply", {
+        params: {
+          post_id: 0,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        // setReplyArr(response);
+        // setReplyNum(replyArr.length);
+      });
+  };
+
+  useEffect(() => {
+    countReply();
+  }, []);
+
   return (
     <div className="list-page">
       <table>
@@ -77,6 +98,7 @@ const ListTable = (props) => {
                   >
                     {data.title}
                   </span>
+                  <span> [댓글수]</span>
                 </td>
                 <td>{data.writer_nick}</td>
                 <td>
