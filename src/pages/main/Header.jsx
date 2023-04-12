@@ -13,6 +13,7 @@ import {
 } from "react-bootstrap";
 
 const Header = (props) => {
+  console.log("안녕 영서야");
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
