@@ -127,7 +127,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "userinfo/:user_id",
+    path: "user/info/:user_id",
     element: <UserInfoPage />,
   },
 ]);

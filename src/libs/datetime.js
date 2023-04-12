@@ -9,7 +9,7 @@ const dateFomat = (dt) => {
   const format_date = now.format("D");
 
   if (month == Number(format_month) && date == Number(format_date)) {
-    return now.format("hh:mm");
+    return now.format("HH:mm");
   } else {
     return now.format("YYYY.MM.DD.");
   }

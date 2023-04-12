@@ -24,15 +24,21 @@ const UserInfoPage = () => {
   });
 
   const showUserInfo = () => {
-    request.get("user/info").then((response) => {
-      setUserInfo({
-        id: response.data.id,
-        name: response.data.name,
-        nick: response.data.nick,
-        intro: response.data.introduction,
-        thumbnail: response.data.thumbnail,
+    request
+      .get("user/info/" + user_id, {
+        params: {
+          user_id: user_id,
+        },
+      })
+      .then((response) => {
+        setUserInfo({
+          id: response.data.id,
+          name: response.data.name,
+          nick: response.data.nick,
+          intro: response.data.introduction,
+          thumbnail: response.data.thumbnail,
+        });
       });
-    });
   };
 
   const [postList, setPostList] = useState([]);
