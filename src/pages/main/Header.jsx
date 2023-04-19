@@ -1,4 +1,5 @@
 import { request } from "src/libs/request";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeUser } from "src/store/user";
 import { useNavigate } from "react-router-dom";
@@ -27,16 +28,14 @@ const Header = (props) => {
     request
       .get("/post/search/list/page", {
         params: {
-          query: "string",
-          board_id: "string",
-          criteria: "string", //T 디폴트라는데 T 입력이 안 됨ㅋㅋ
+          query: searchValue,
+          criteria: searchSelect, //T 디폴트라는데 T 입력이 안 됨ㅋㅋ
           page: 1,
           size: 10,
-          order: "string",
         },
       })
       .then((response) => {
-        console.log(response);
+        console.log(response.data);
       });
   };
 
@@ -44,6 +43,16 @@ const Header = (props) => {
     if (e.key === "Enter") {
       doSearch();
     }
+  };
+
+  const [searchValue, setSearchValue] = useState("");
+  const searchOnChange = (e) => {
+    setSearchValue(e.target.value);
+  };
+
+  const [searchSelect, setSearchSelect] = useState("");
+  const searchOnSelect = (e) => {
+    setSearchSelect(e.target.value);
   };
 
   return (
@@ -65,13 +74,18 @@ const Header = (props) => {
           </Navbar.Brand>
 
           <div className="search_bar">
-            <select className="head-select" name="search">
+            <select
+              className="head-select"
+              name="search"
+              onChange={searchOnSelect}
+              value={searchSelect}
+            >
               <option value="">검색내용</option>
-              <option value="title">제목</option>
-              <option value="text">본문</option>
-              <option value="write">작성자</option>
-              <option value="title_text">제목 + 본문</option>
-              <option value="all">전체</option>
+              <option value="T">제목</option>
+              <option value="B">본문</option>
+              <option value="W">작성자</option>
+              <option value="TB">제목 + 본문</option>
+              <option value="A">전체</option>
             </select>
 
             <Form.Control
@@ -80,6 +94,8 @@ const Header = (props) => {
               minLength={2}
               maxLength={10}
               onKeyPress={handleOnKeyPress}
+              onChange={searchOnChange}
+              value={searchValue}
             />
 
             <Button
@@ -102,7 +118,7 @@ const Header = (props) => {
                   className="outline-secondary text-nowrap"
                   style={{ marginRight: "10px" }}
                   onClick={() => {
-                    navigate("/userinfo?page=1");
+                    navigate("/user/info/" + user.id + "?page=1");
                   }}
                 >
                   마이페이지
