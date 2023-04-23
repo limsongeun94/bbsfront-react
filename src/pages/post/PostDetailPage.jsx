@@ -48,6 +48,7 @@ const PostDetailPage = () => {
       })
       .then((response) => {
         setPost(response.data);
+        console.log("레스폰스", response);
       });
   };
 
@@ -171,6 +172,10 @@ const PostDetailPage = () => {
     getUserId();
   }, [user_state]);
 
+  console.log("유저스테이트 아이디", user_state.id);
+  console.log("로그인인포", loginInfo);
+  console.log("포스트, 글쓴이아이디", post.writer_id);
+
   return (
     <Page>
       <h2 className="board-name">{post.board.name}</h2>
@@ -204,22 +209,28 @@ const PostDetailPage = () => {
             맨위로
           </Button>
         </div>
-        {loginInfo ? (
-          <div className="edit-btn">
-            <Button
-              variant="outline-secondary"
-              className="outline-secondary text-nowrap"
-              onClick={editPost}
-            >
-              수정
-            </Button>
-            <Button
-              variant="outline-secondary"
-              className="outline-secondary text-nowrap"
-              onClick={removePost}
-            >
-              삭제
-            </Button>
+
+        <div className="edit-btn">
+          {post.writer_id == loginInfo ? (
+            <>
+              <Button
+                variant="outline-secondary"
+                className="outline-secondary text-nowrap"
+                onClick={editPost}
+              >
+                수정
+              </Button>
+              <Button
+                variant="outline-secondary"
+                className="outline-secondary text-nowrap"
+                onClick={removePost}
+              >
+                삭제
+              </Button>
+            </>
+          ) : null}
+
+          {loginInfo ? (
             <Button
               variant="outline-secondary"
               className="outline-secondary text-nowrap"
@@ -227,10 +238,11 @@ const PostDetailPage = () => {
                 navigate("/post/writer/new");
               }}
             >
+              {" "}
               글쓰기
             </Button>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
       </div>
       <ListTable postList={postList} noticeList={noticeList} />
       <PageNum

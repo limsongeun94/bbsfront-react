@@ -24,24 +24,9 @@ const Header = (props) => {
     });
   };
 
-  const doSearch = () => {
-    request
-      .get("/post/search/list/page", {
-        params: {
-          query: searchValue,
-          criteria: searchSelect, //T 디폴트라는데 T 입력이 안 됨ㅋㅋ
-          page: 1,
-          size: 10,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-      });
-  };
-
   const handleOnKeyPress = (e) => {
     if (e.key === "Enter") {
-      doSearch();
+      navigate("list/search/" + searchSelect + "/" + searchValue);
     }
   };
 
@@ -101,7 +86,10 @@ const Header = (props) => {
             <Button
               variant="outline-secondary"
               className="outline-secondary text-nowrap"
-              onClick={doSearch}
+              // onClick={doSearch}
+              onClick={() => {
+                navigate("list/search/" + searchSelect + "/" + searchValue);
+              }}
             >
               검색
             </Button>

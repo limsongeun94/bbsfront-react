@@ -27,6 +27,7 @@ import PostWritePageEdit from "src/pages/post/PostWritePage_edit";
 import UserInfoPage from "src/pages/user/UserInfoPage";
 import NoticeListPage from "src/pages/notice/NoticeListPage";
 import NoticeDetailPage from "src/pages/notice/NoticeDetailPage";
+import SearchPostListPage from "src/pages/post/SearchPostListPage";
 
 const router = createBrowserRouter([
   {
@@ -89,6 +90,11 @@ const router = createBrowserRouter([
     path: "post",
     element: <MainLayout />,
     children: [
+      {
+        path: "list/search/:searchSelect/:searchValue",
+        element: <SearchPostListPage />,
+      },
+
       {
         path: "list/:board_id",
         element: <PostListPage />,

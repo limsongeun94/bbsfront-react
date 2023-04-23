@@ -127,6 +127,9 @@ const UserInfoPage = () => {
     getUserId();
   }, [user_state]);
 
+  console.log("유저아이디", user_id);
+  console.log("로그인인포", loginInfo);
+
   return (
     <div className="userinfo-page">
       <Header />
@@ -143,7 +146,7 @@ const UserInfoPage = () => {
               accept="image/*"
               style={{ display: "none" }}
             />
-            {loginInfo ? (
+            {user_id != loginInfo ? null : loginInfo ? (
               <Button
                 variant="outline-secondary"
                 className="outline-secondary text-nowrap"
@@ -182,7 +185,7 @@ const UserInfoPage = () => {
             </tr>
             <tr>
               <td style={{ width: "100px" }}>자기소개</td>
-              {loginInfo && introUpdate ? (
+              {introUpdate ? (
                 <td>{userInfo.intro}</td>
               ) : (
                 <td>
@@ -198,7 +201,7 @@ const UserInfoPage = () => {
           </table>
         </div>
         <div>
-          {introUpdate ? (
+          {user_id != loginInfo ? null : introUpdate ? (
             <Button
               variant="outline-secondary"
               className="outline-secondary text-nowrap"
