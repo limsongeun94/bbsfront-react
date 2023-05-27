@@ -80,6 +80,7 @@ const PostListPage = () => {
   }, [page]);
 
   useEffect(() => {
+    setPostPage();
     showBoardName();
     showBoardNotice();
   }, [board_id]);
