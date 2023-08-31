@@ -33,6 +33,7 @@ const JoinPage0 = () => {
     if (checked) {
       setCheckItem([...checkItem, id]);
       dispatch(createTerm(id));
+      console.log("안녕", id);
     } else {
       setCheckItem(checkItem.filter((el) => el != id));
     }
@@ -49,12 +50,14 @@ const JoinPage0 = () => {
 
   useEffect(() => {
     request.get("/terms/service").then((response) => {
-      setServiceAgree(response.data.Terms.content);
-      setServiceTermsId(response.data.Terms.id);
+      setServiceAgree(response.data.content);
+      setServiceTermsId(response.data.id);
+      console.log("서비스텀", response.data.id);
     });
     request.get("/terms/privacy").then((response) => {
-      setInfoAgree(response.data.Terms.content);
-      setInfoTermsId(response.data.Terms.id);
+      setInfoAgree(response.data.content);
+      setInfoTermsId(response.data.id);
+      console.log("인포텀", response.data.id);
     });
   }, []);
 

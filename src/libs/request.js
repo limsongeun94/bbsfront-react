@@ -7,7 +7,7 @@ axios.defaults.withCredentials = true;
 
 export const request = axios.create({
   baseURL: "https://bbsapi-dev.seoly.me/api/v1",
-  timeout: 1000,
+  // timeout: 1000,
   headers: { "Content-Type": "application/json" },
   withCredentials: true,
   transformResponse: [

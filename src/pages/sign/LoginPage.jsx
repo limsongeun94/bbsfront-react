@@ -9,9 +9,9 @@ const LoginPage = (props) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
-  if (user.id) {
-    navigate("/");
-  }
+  // if (user.id) {
+  //   navigate("/");
+  // }
 
   const doLogin = () => {
     const email = document.getElementById("user-login-email").value;
@@ -25,6 +25,7 @@ const LoginPage = (props) => {
         })
         .then((res) => {
           dispatch(setUser(res.data.user));
+          navigate("/");
         })
         .catch((error) => {
           alert("일치하는 이메일과 비밀번호가 없습니다.");

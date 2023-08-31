@@ -28,6 +28,9 @@ import UserInfoPage from "src/pages/user/UserInfoPage";
 import NoticeListPage from "src/pages/notice/NoticeListPage";
 import NoticeDetailPage from "src/pages/notice/NoticeDetailPage";
 import SearchPostListPage from "src/pages/post/SearchPostListPage";
+import Cert from "src/pages/Cert";
+import AuthSuccessPage from "src/pages/sign/AuthSuccessPage";
+import AuthFailPage from "src/pages/sign/AuthFailPage";
 
 const router = createBrowserRouter([
   {
@@ -69,9 +72,22 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "emailauth",
-        element: <EmailAuthPage />,
+        path: "authentication",
+        children: [
+          {
+            path: "success",
+            element: <AuthSuccessPage />,
+          },
+          {
+            path: "fail",
+            element: <AuthFailPage />,
+          },
+        ],
       },
+      // {
+      //   path: "emailauth",
+      //   element: <EmailAuthPage />,
+      // },
       {
         path: "findpword",
         element: <FindPassWord />,
@@ -135,6 +151,10 @@ const router = createBrowserRouter([
   {
     path: "user/info/:user_id",
     element: <UserInfoPage />,
+  },
+  {
+    path: "cert",
+    element: <Cert />,
   },
 ]);
 
