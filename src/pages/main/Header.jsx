@@ -88,7 +88,9 @@ const Header = (props) => {
               className="outline-secondary text-nowrap"
               // onClick={doSearch}
               onClick={() => {
-                navigate("list/search/" + searchSelect + "/" + searchValue);
+                navigate(
+                  "list/search/" + searchSelect + "/" + searchValue + "?page=1"
+                );
               }}
             >
               검색
@@ -122,7 +124,7 @@ const Header = (props) => {
             ) : (
               // <Button variant="outline-primary">Primary</Button>
               // 버튼이 퍼지는 이유는 글자가 개행(너비가 부족해서 다음줄로 넘어감)되어서 그런건데
-              // css 옵션중에 글자 개행을 막는 옵션이 white-space: nowrap; 이야
+              // css 옵션중에 글자 개행을 막는 옵션이 white-space: nowrap;
               <Button
                 variant="outline-secondary"
                 className="outline-secondary text-nowrap"
