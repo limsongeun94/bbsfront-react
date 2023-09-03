@@ -26,7 +26,11 @@ const Header = (props) => {
 
   const handleOnKeyPress = (e) => {
     if (e.key === "Enter") {
-      navigate("list/search/" + searchSelect + "/" + searchValue);
+      if (searchSelect === "") {
+        alert("검색내용의 유형을 선택해주세요.");
+      } else {
+        navigate("list/search/" + searchSelect + "/" + searchValue);
+      }
     }
   };
 
@@ -88,9 +92,15 @@ const Header = (props) => {
               className="outline-secondary text-nowrap"
               // onClick={doSearch}
               onClick={() => {
-                navigate(
-                  "list/search/" + searchSelect + "/" + searchValue + "?page=1"
-                );
+                searchSelect === ""
+                  ? alert("검색내용의 유형을 선택해주세요.")
+                  : navigate(
+                      "list/search/" +
+                        searchSelect +
+                        "/" +
+                        searchValue +
+                        "?page=1"
+                    );
               }}
             >
               검색
