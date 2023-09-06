@@ -48,7 +48,6 @@ const PostDetailPage = () => {
       })
       .then((response) => {
         setPost(response.data);
-        console.log("레스폰스", response);
       });
   };
 
@@ -171,10 +170,6 @@ const PostDetailPage = () => {
   useEffect(() => {
     getUserId();
   }, [user_state]);
-
-  console.log("유저스테이트 아이디", user_state.id);
-  console.log("로그인인포", loginInfo);
-  console.log("포스트, 글쓴이아이디", post.writer_id);
 
   return (
     <Page>
