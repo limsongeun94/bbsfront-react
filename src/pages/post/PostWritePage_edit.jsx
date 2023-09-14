@@ -66,7 +66,6 @@ const PostWriterPage = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setSelected(response.data.board_id);
         setNameInput(response.data.title);
         setMainText(response.data.body);

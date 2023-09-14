@@ -85,8 +85,6 @@ const ReplyView = (props) => {
   const [reUpdateState, setReUpdateState] = useState(0);
   const [rereUpdateState, setReReUpdateState] = useState(0);
 
-  console.log("reUpdateState1", reUpdateState);
-
   const OnClickReReplyCreate = (_props) => {
     if (reReply == _props.data.id && clickReply == true) {
       return (

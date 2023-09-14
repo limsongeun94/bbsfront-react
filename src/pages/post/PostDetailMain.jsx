@@ -9,8 +9,6 @@ const PostDetailMain = (props) => {
     return state.user;
   });
 
-  console.log(user_state.id);
-
   const onClickThumbsUp = () => {
     if (user_state.id) {
       request

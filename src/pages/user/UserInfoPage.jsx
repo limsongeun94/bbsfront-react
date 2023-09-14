@@ -100,7 +100,6 @@ const UserInfoPage = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setUserInfo({ ...userInfo, thumbnail: response.data.thumbnail });
       });
   };
@@ -126,9 +125,6 @@ const UserInfoPage = () => {
   useEffect(() => {
     getUserId();
   }, [user_state]);
-
-  console.log("유저아이디", user_id);
-  console.log("로그인인포", loginInfo);
 
   return (
     <div className="userinfo-page">

@@ -11,11 +11,9 @@ export default () => {
     request
       .post("/cert?key=" + key)
       .then((response) => {
-        console.log("안녕", response);
         navigate("/landing/authentication/success");
       })
       .catch((response) => {
-        console.log("에러남 ㅅㄱ");
         navigate("/landing/authentication/fail");
       });
   }, []);
