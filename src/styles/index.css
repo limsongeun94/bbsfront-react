@@ -193,6 +193,15 @@ a:visited {
   margin-left: 46px;
   text-align: left;
   font-size: 0.9em;
+  margin-bottom: 0;
+}
+
+.email_explain {
+  width: 250px;
+  margin-left: 46px;
+  text-align: left;
+  font-size: 0.75em;
+  color: #828282;
 }
 
 .margin-bottom {
@@ -273,6 +282,7 @@ a:visited {
   width: 145px;
   height: 2.5em;
   margin-right: 15px;
+  border: 1px solid rgb(133, 133, 133);
 }
 
 .list-page > table {
