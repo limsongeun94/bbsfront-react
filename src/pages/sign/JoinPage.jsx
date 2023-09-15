@@ -255,6 +255,9 @@ const JoinPage1 = () => {
               이메일 형식을 체크하세요.
             </p>
           )}
+          <p className="email_explain">
+            ※ ruu.kr 이메일 서비스를 이용하여 가입하는 것을 추천드립니다.
+          </p>
         </div>
         <div>
           <input
