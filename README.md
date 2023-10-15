@@ -11,7 +11,7 @@
 $ yarn build
 
 ## 데모
-https://cocobbs.netlify.app 
+[https://cocobbs.netlify.app](https://bbsfront.vercel.app/) 
 
 ## 멤버 구성
 * [seoly0](https://github.com/seoly0) - 기획, API 구축
