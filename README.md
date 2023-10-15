@@ -1,5 +1,11 @@
 # 커뮤니티 게시판
 
+<p>
+  <img width="33%" src="https://github.com/limsongeun94/bbsfront-react/assets/84313959/68fe8bcb-406d-4525-a5d0-259813ce0d2b" alt="회원가입로그인">
+  <img width="33%" src="https://github.com/limsongeun94/bbsfront-react/assets/84313959/3ab99652-2b27-4503-b27d-9a288fccdb6b" alt="게시글CRUD">
+  <img width="33%" src="https://github.com/limsongeun94/bbsfront-react/assets/84313959/453743d6-18ef-4d5a-8d7f-78a8d8641883" alt="검색">
+</p>
+
 ## 프로젝트 설명
 온라인 게시판에 글을 쓰고 댓글을 씀으로써 소통할 수 있는 커뮤니티 사이트입니다.
 
