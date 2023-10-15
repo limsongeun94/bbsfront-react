@@ -29,7 +29,9 @@ const Header = (props) => {
       if (searchSelect === "") {
         alert("검색내용의 유형을 선택해주세요.");
       } else {
-        navigate("list/search/" + searchSelect + "/" + searchValue);
+        navigate(
+          "/post/list/search/" + searchSelect + "/" + searchValue + "?page=1"
+        );
       }
     }
   };
