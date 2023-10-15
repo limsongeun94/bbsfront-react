@@ -1,9 +1,9 @@
 # 커뮤니티 게시판
 
 <p>
-<img src="https://github.com/limsongeun94/bbsfront-react/assets/84313959/fc48f090-f77f-4e7d-a573-e279f4ab5946" width="50%" alt="회원가입로그인"></img>
-<img src="https://github.com/limsongeun94/bbsfront-react/assets/84313959/1f4e5372-d83a-40f8-9f5f-a5bfdbf1092d" width="50%" alt="게시글CRUD"></img>
-<img src="https://github.com/limsongeun94/bbsfront-react/assets/84313959/4f93e5bd-6f52-4bf4-b2d8-b1a389f628e9" width="50%" alt="검색"></img>
+<img src="https://github.com/limsongeun94/bbsfront-react/assets/84313959/fc48f090-f77f-4e7d-a573-e279f4ab5946" width="80%" alt="회원가입로그인"></img>
+<img src="https://github.com/limsongeun94/bbsfront-react/assets/84313959/1f4e5372-d83a-40f8-9f5f-a5bfdbf1092d" width="80%" alt="게시글CRUD"></img>
+<img src="https://github.com/limsongeun94/bbsfront-react/assets/84313959/4f93e5bd-6f52-4bf4-b2d8-b1a389f628e9" width="80%" alt="검색"></img>
 </p>
 
 ## 프로젝트 설명
