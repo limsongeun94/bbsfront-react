@@ -95,7 +95,7 @@ const Header = (props) => {
                 searchSelect === ""
                   ? alert("검색내용의 유형을 선택해주세요.")
                   : navigate(
-                      "list/search/" +
+                      "/list/search/" +
                         searchSelect +
                         "/" +
                         searchValue +
